@@ -17,5 +17,14 @@ namespace EVIC
             {
             }
         }
+
+        // Main
+        //
+        // Interact with the user to modify the information for the program
+        public static void ModifyInfo()
+        {
+            Console.WriteLine("Started simulator successfully!");
+            Console.ReadLine();
+        }
     }
 }

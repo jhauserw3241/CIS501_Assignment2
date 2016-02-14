@@ -17,5 +17,14 @@ namespace EVIC
             {
             }
         }
+
+        // Main
+        //
+        // Interact with the user to display the information for the program
+        public static void ReadInfo()
+        {
+            Console.WriteLine("Started dashboard display successfully!");
+            Console.ReadLine();
+        }
     }
 }
