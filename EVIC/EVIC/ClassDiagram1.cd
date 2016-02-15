@@ -3,7 +3,7 @@
   <Class Name="EVIC.DashboardDisplay">
     <Position X="0.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAISAAAAAAAAAAAAAIGAAAAAAAAEAAAAAAAAA=</HashCode>
       <FileName>DashboardDisplay.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -11,9 +11,9 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="EVIC.Simulator">
-    <Position X="0.75" Y="1.75" Width="1.5" />
+    <Position X="0.75" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <HashCode>AAAAAACAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Simulator.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -23,7 +23,7 @@
   <Class Name="EVIC.Controller">
     <Position X="3.5" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Controller.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
