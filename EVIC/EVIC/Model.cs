@@ -1,4 +1,7 @@
-﻿namespace EVIC
+﻿using System;
+using System.Collections.Generic;
+
+namespace EVIC
 {
     public class Model
     {
@@ -132,6 +135,14 @@
             isOutTemp = val;
         }
 
+        // Set Inside Temperature
+        //
+        // Set the temperature inside of the vehicle.
+        public void SetInTemp(int temp)
+        {
+            inTemp = temp;
+        }
+
         // Set Metric Units
         //
         // Set whether or not the units are metric
@@ -166,6 +177,14 @@
         public void SetOilChangeDist(int val)
         {
             milesTillNextChange = val;
+        }
+
+        // Set Outside Temperature
+        // 
+        // Set the temperature inside the vehicle.
+        public void SetOutTemp(int temp)
+        {
+            outTemp = temp;
         }
 
         // Set Trip A Distance

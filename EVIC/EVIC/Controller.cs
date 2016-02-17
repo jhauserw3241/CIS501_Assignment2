@@ -322,5 +322,43 @@ namespace EVIC
             data.SetWarningMessageState(data.GetWarningMessageState() + 1);
         }
 
+
+
+        public void SwitchUnits()
+        {
+            if (data.IsMetricUnits())
+            {
+                data.SetOdometerValue(CnvtUnits(data.GetOdometerValue(), "mi"));
+                data.SetOilChangeDist(CnvtUnits(data.GetMilesTillNextChange(), "mi"));
+                data.SetTripADist(CnvtUnits(data.GetTripADist(), "mi"));
+                data.SetTripBDist(CnvtUnits(data.GetTripBDist(), "mi"));
+                data.SetOutTemp(CnvtUnits(data.GetOutTemp(), "f"));
+                data.SetInTemp(CnvtUnits(data.GetInTemp(), "f"));
+            } else {
+                data.SetOdometerValue(CnvtUnits(data.GetOdometerValue(), "km"));
+                data.SetOilChangeDist(CnvtUnits(data.GetMilesTillNextChange(), "km"));
+                data.SetTripADist(CnvtUnits(data.GetTripADist(), "km"));
+                data.SetTripBDist(CnvtUnits(data.GetTripBDist(), "km"));
+                data.SetOutTemp(CnvtUnits(data.GetOutTemp(), "c"));
+                data.SetInTemp(CnvtUnits(data.GetInTemp(), "c"));
+            }
+        }
+
+        private int CnvtUnits(int value, string into)
+        {
+            switch (into)
+            {
+                case "c":
+                    return (int)Math.Round(((double)value - 32.0) / (9.0 / 5.0));
+                case "f":
+                    return (int)Math.Round((double)value * (9.0 / 5.0) + 32.0);
+                case "km":
+                    return (int)Math.Round((double)value / 0.62137);
+                case "mi":
+                    return (int)Math.Round((double)value * 0.62137);
+                default:
+                    return -1;
+            }
+        }
     }
 }

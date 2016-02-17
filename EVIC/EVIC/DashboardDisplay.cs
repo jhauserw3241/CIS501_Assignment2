@@ -8,7 +8,6 @@ namespace EVIC
     public class DashboardDisplay
     {
         private Controller controllerInfo = new Controller();
-
         // Personal Settings Map
         //
         // Display and handle the personal settings options
@@ -88,7 +87,7 @@ namespace EVIC
                 Console.WriteLine("");
             }
         }
-
+ 
         // System Status Map
         //
         // Display and handle the system status options

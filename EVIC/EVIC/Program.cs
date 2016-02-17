@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using EVIC.DashboardDisplay;
 
 namespace EVIC
 {
@@ -11,11 +12,7 @@ namespace EVIC
         private DashboardDisplay display = new DashboardDisplay();
         private Simulator sim = new Simulator();
 
-        // Main
-        //
-        // Run this code when the program starts
-        static void Main()
-        {
+        static void Main() {
             Program currentProgram = new Program();
             int status = 0;
             while (status == 0)
@@ -36,8 +33,9 @@ namespace EVIC
             Console.WriteLine("2.) Simulator");
             Console.WriteLine("3.) Quit Program");
 
-            // Interpret the user's choice
             string input = Console.ReadLine();
+
+            // Interpret the user's choice
             if (input.Equals("1"))
             {
                 display.ReadInfo();
