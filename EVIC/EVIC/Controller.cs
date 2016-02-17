@@ -234,6 +234,31 @@ namespace EVIC
             return categoryValue;
         } // End GetCategoryValueString()
 
+        // Increment Odometer Value
+        //
+        // Increment the odometer value, decrement the miles till the next oil change, and
+        // decrement Trip-A or Trip-B (depending on if the value of Trip-A is zero)
+        public void IncrementOdometerValue()
+        {
+            // Increment the odometer value
+            data.SetOdometerValue(data.GetOdometerValue() + 1);
+
+            // Decrement the miles till the next oil change
+            data.SetOilChangeDist(data.GetMilesTillNextChange() - 1);
+
+            // Determine if there is any more distance in the first trip
+            if (data.GetTripADist() > 0)
+            {
+                // Decrement the distance for Trip A
+                data.SetTripADist(data.GetTripADist() - 1);
+            }
+            else if(data.GetTripBDist() > 0)
+            {
+                // Decrement the distance for Trip B
+                data.SetTripBDist(data.GetTripBDist() - 1);
+            }
+        }
+
         // Reset Current Trip Distance
         //
         // Reset the current trip distance value
