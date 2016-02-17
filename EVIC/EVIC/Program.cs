@@ -9,49 +9,51 @@ namespace EVIC
 {
     class Program
     {
-        public DashboardDisplay DashboardDisplay
-        {
-            get
+        private DashboardDisplay display = new DashboardDisplay();
+        private Simulator sim = new Simulator();
+
+        static void Main() {
+            Program currentProgram = new Program();
+            int status = 0;
+            while (status == 0)
             {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
+                status = currentProgram.ProvideUserOptions();
             }
         }
 
-
-        public Simulator Simulator
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
-
-        static void Main()
+        // Provide User Options
+        //
+        // Provider the user the option of using the Dashboard
+        // Display or the Simulator
+        public int ProvideUserOptions()
         {
             // Offer the user option
-            Console.WriteLine("Which program would you like to use?(1 or 2)");
+            Console.WriteLine("Which program would you like to use?(1, 2, or 3)");
             Console.WriteLine("1.) Dashboard Display");
             Console.WriteLine("2.) Simulator");
+            Console.WriteLine("3.) Quit Program");
+
+            string input = Console.ReadLine();
 
             // Interpret the user's choice
-            if (Console.Read() == 1)
+            if (input.Equals("1"))
             {
-                DashboardDisplay.ReadInfo();
+                display.ReadInfo();
+                return 0;
             }
-            else if (Console.Read() == 2)
+            else if (input.Equals("2"))
             {
-                Simulator.ModifyInfo();
+                sim.ModifyInfo();
+                return 0;
+            }
+            else if (input.Equals("3"))
+            {
+                return 1;
             }
             else
             {
-                Console.Write("Invalid option");
-                Console.ReadKey();
+                Console.Write("Error: Invalid option");
+                return 0;
             }
         }
     }

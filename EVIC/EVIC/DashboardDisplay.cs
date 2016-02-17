@@ -7,98 +7,275 @@ namespace EVIC
 {
     public class DashboardDisplay
     {
-        private Dictionary<int, int> subMenuMem = new Dictionary<int, int>() { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 3, 0 }, { 4, 0 } };
-        private int menuMem = 0; // 0 = System Status, 1 = Warning Messages, 2 = Personal Settings, 3 = Temperature Info, 4 = Trip Info
-
-        public Controller Controller { get; set; }
-        public int MenuMem { get { return menuMem; } }
-        public Dictionary<int, int> SubMenuMem { get { return subMenuMem; } }
-
-        // Format and display output for the console.
-        public void DisplayUnits(int value, string unit)
+        private Controller controllerInfo = new Controller();
+        // Personal Settings Map
+        //
+        // Display and handle the personal settings options
+        public void PersonalSettingsMap()
         {
-            Console.WriteLine("[{0} {1}]", value.ToString(), unit);
-        }
-
-        // Interpret input from keyboard into format that is no hardware dependant.
-        private int GetAction()
-        {
-            ConsoleKeyInfo input = Console.ReadKey();
-            switch(input.Key)
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
             {
-                case ConsoleKey.UpArrow:
-                    return 0;
-                case ConsoleKey.RightArrow:
-                    return 1;
-                case ConsoleKey.DownArrow:
-                    return 2;
-                case ConsoleKey.LeftArrow:
-                    return 3;
-                case ConsoleKey.Spacebar:
-                    return 4;
-                case ConsoleKey.Enter:
-                    return 5;
-                case ConsoleKey.Escape:
-                    return 6;
-                default:
-                    return -1;
+                "Warning Messages",
+                "Units",
+                "Temp Info",
+                "Toggle Units",
+                "System Status"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "left",
+                "up",
+                "right",
+                "space",
+                "escape"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
+
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.LeftArrow == input)
+            {
+                WarningMessagesMap();
+            }
+            else if (ConsoleKey.UpArrow == input)
+            {
+                PersonalSettingsMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                TemperatureDisplayMap();
+            }
+            else if (ConsoleKey.Spacebar == input)
+            {
+                controllerInfo.ToggleMetricUnits();
+                PersonalSettingsMap();
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
             }
         }
 
-        // Navigate the dashboard menu
-        private bool NavMenu(int direction)
-        {
-            switch (direction)
-            {
-                case 0: // Sub-menu scroll up
-                    switch (menuMem)
-                    {
-                        case 0:
-                        case 3:
-                        case 4:
-                            subMenuMem[menuMem] = (subMenuMem[menuMem] - 1) % 2;
-                            break;
-                        case 1:
-                            subMenuMem[1] = (subMenuMem[1] - 1) % 3;
-                            break;
-                        default:
-                            return false;
-                    }
-                    break;
-                case 1: // Main menu scroll right
-                    menuMem = (menuMem + 1) % 5;
-                    break;
-                case 2: // Sub-menu scroll down
-                    switch (menuMem)
-                    {
-                        case 0:
-                        case 3:
-                        case 4:
-                            subMenuMem[menuMem] = (subMenuMem[menuMem] + 1) % 2;
-                            break;
-                        case 1:
-                            subMenuMem[1] = (subMenuMem[1] + 1) % 3;
-                            break;
-                        default:
-                            return false;
-                    }
-                    break;
-                case 3: // Main Menu scroll left
-                    menuMem = (menuMem - 1) % 5;
-                    break;
-                default:
-                    return false;
-            }
-            return true;
-        }
-
-        // Main
+        // Read Info
         //
         // Interact with the user to display the information for the program
-        public static void ReadInfo()
+        public void ReadInfo()
         {
             Console.WriteLine("Started dashboard display successfully!");
-            Console.ReadLine();
+            SystemStatusMap();
+            return;
+        }
+
+        // Set and Display Options
+        //
+        // Set and display the user's options for how to proceed
+        public void SetDisplayOptions(List<string> categories, List<string> dirs)
+        {
+            // Get the data for the options to output to the user
+            List<List<string>> optionArgs = controllerInfo.DisplayOption(categories, dirs);
+            int numOptions = optionArgs.Count;
+            int numLines = optionArgs[0].Count;
+
+            // Output the options to the user
+            for (int i = 0; i < numLines; i++)
+            {
+                for (int j = 0; j < numOptions; j++)
+                {
+                    Console.Write(optionArgs[j][i]);
+                }
+                Console.WriteLine("");
+            }
+        }
+ 
+        // System Status Map
+        //
+        // Display and handle the system status options
+        public void SystemStatusMap()
+        {
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
+            {
+                "Trip Info",
+                "System Info",
+                "Warning Messages",
+                "Reset Oil",
+                "Quit Display"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "left",
+                "up&down",
+                "right",
+                "space",
+                "escape"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
+
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.LeftArrow == input)
+            {
+                //Console.WriteLine("Left");
+                TripInfoMap();
+            }
+            else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
+            {
+                SystemStatusMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                //Console.WriteLine("Right");
+                WarningMessagesMap();
+            }
+            else if (ConsoleKey.Spacebar == input)
+            {
+                controllerInfo.ResetOilChange();
+                SystemStatusMap();
+            }
+            else if (ConsoleKey.Escape == input)
+            {
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
+            }
+            Console.ReadKey();
+        }
+
+        // Temperature Display Map
+        //
+        // Display and handle the temperature display options
+        public void TemperatureDisplayMap()
+        {
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
+            {
+                "Personal Settings",
+                "Toggle Temp Info",
+                "Trip Info",
+                "System Status"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "left",
+                "up&down",
+                "right",
+                "escape"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
+
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.LeftArrow == input)
+            {
+                PersonalSettingsMap();
+            }
+            else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
+            {
+                controllerInfo.ToggleDisplayTemp();
+                TemperatureDisplayMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                TripInfoMap();
+            }
+            else if (ConsoleKey.Escape == input)
+            {
+                SystemStatusMap();
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
+            }
+        }
+
+        // Trip Info Map
+        //
+        // Display and handle the trip information options
+        public void TripInfoMap()
+        {
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
+            {
+                "Temp Info",
+                "Toggle Trip Info",
+                "System Status",
+                "Reset Trip Info"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "left",
+                "up&down",
+                "right",
+                "space"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
+
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.LeftArrow == input)
+            {
+                TemperatureDisplayMap();
+            }
+            else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
+            {
+                TripInfoMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                SystemStatusMap();
+            }
+            else if (ConsoleKey.Spacebar == input)
+            {
+                controllerInfo.ResetCurrentTripDist();
+                TripInfoMap();
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
+            }
+        }
+
+        // Warning Messages Map
+        //
+        // Display and handle the warning messages options
+        public void WarningMessagesMap()
+        {
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
+            {
+                "System Status",
+                "Warning Messages",
+                "Personal Settings"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "left",
+                "up&down",
+                "right"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
+
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.LeftArrow == input)
+            {
+                SystemStatusMap();
+            }
+            else if (ConsoleKey.UpArrow == input)
+            {
+                WarningMessagesMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                PersonalSettingsMap();
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
+            }
         }
     }
 }

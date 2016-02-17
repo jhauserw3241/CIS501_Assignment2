@@ -5,100 +5,212 @@ namespace EVIC
 {
     public class Model
     {
-        // Define fields
-        #region Fields
-        
-        private int units = 0, // 0 = US, 1 = Metric
-            odometerValue = 0,
-            distTillNextChange = 3000,
-            tripADist = 0,
-            tripBDist = 0,
-            outTemp = 75,
-            inTemp = 70;
-        private bool door = false,
-            engine = false,
-            oil = false;
+        // Define variables
+        private bool checkEngine = false;
+        private bool doorAjar = false;
+        private int inTemp = 0;
+        private bool isMetricUnits = false;
+        private bool isOdometerSys = true;
+        private bool isOutTemp = false;
+        private bool isTripA = true;
+        private int milesTillNextChange = 3000;
+        private int odometerValue = 0;
+        private int outTemp = 0;
+        private int tripADist = 0;
+        private int tripBDist = 0;
+        private int warningMessageState = 0;
 
-        #endregion
+        // Allow other classes to access variables
 
-        // Define properties
-        #region Properties
-        
-        public int Units { get { return units; } }
-        public int OdometerValue { get { return odometerValue; } }
-        public int DistTillNextChange { get { return distTillNextChange; } }
-        public int TripADist { get { return tripADist; } }
-        public int TripBDist { get { return tripBDist; } }
-        public int OutTemp { get { return outTemp; } }
-        public int InTemp { get { return inTemp; } }
-        public bool Door { get { return door; } }
-        public bool Engine { get { return engine; } }
-        public bool Oil { get { return oil; } }
-
-        #endregion
-        
-        private bool ResetGauge(string gauge)
+        // Is Check Engine
+        //
+        // @return whether or not the user should check the engine soon
+        public bool IsCheckEngine()
         {
-            switch (gauge)
-            {
-                case "total":
-                    odometerValue = 0;
-                    break;
-                case "tripA":
-                    tripADist = 0;
-                    break;
-                case "tripB":
-                    tripBDist = 0;
-                    break;
-                default:
-                    return false;
-            }
-            return true;
+            return checkEngine;
         }
 
-        #region Personal Settings
-
-        public void SwitchUnits()
+        // Is Door Ajar
+        //
+        // @return whether or not door is ajar
+        public bool IsDoorAjar()
         {
-            units = (units + 1) % 2;
-            switch (units)
-            {
-                case 0:
-                    odometerValue = CnvtUnits(odometerValue, "mi");
-                    distTillNextChange = CnvtUnits(distTillNextChange, "mi");
-                    tripADist = CnvtUnits(tripADist, "mi");
-                    tripBDist = CnvtUnits(tripBDist, "mi");
-                    outTemp = CnvtUnits(outTemp, "f");
-                    inTemp = CnvtUnits(inTemp, "f");
-                    break;
-                case 1:
-                    odometerValue = CnvtUnits(odometerValue, "km");
-                    distTillNextChange = CnvtUnits(distTillNextChange, "km");
-                    tripADist = CnvtUnits(tripADist, "km");
-                    tripBDist = CnvtUnits(tripBDist, "km");
-                    outTemp = CnvtUnits(outTemp, "c");
-                    inTemp = CnvtUnits(inTemp, "c");
-                    break;
-            }
+            return doorAjar;
         }
 
-        private int CnvtUnits(int value, string into)
+        // Is Metric Units
+        //
+        // @return whether or not the output should be display in metric units
+        public bool IsMetricUnits()
         {
-            switch (into)
-            {
-                case "c":
-                    return (int)Math.Round(((double)value - 32.0) / (9.0 / 5.0));
-                case "f":
-                    return (int)Math.Round((double)value * (9.0/5.0) + 32.0);
-                case "km":
-                    return (int)Math.Round((double)value / 0.62137);
-                case "mi":
-                    return (int)Math.Round((double)value * 0.62137);
-                default:
-                    return -1;
-            }
+            return isMetricUnits;
         }
 
-        #endregion
+        // Is Out Temperature
+        //
+        // @return whether or not the output temperature should be the internal temperature
+        //      of the car or the temperature of the outside
+        public bool IsOutTemp()
+        {
+            return isOutTemp;
+        }
+
+        // Is Trip A
+        //
+        // @return whether or not the trip information to output is the Trip A information
+        public bool IsTripA()
+        {
+            return isTripA;
+        }
+
+        // Get In Temp
+        //
+        // @return the internal temp of the car
+        public int GetInTemp()
+        {
+            return inTemp;
+        }
+
+        // Get Miles Till Next Change
+        //
+        // @return the number of miles till the next oil change
+        public int GetMilesTillNextChange()
+        {
+            return milesTillNextChange;
+        }
+
+        // Set Odometer System
+        //
+        // @return whether or not the odometer should be outputted for the System Status
+        public bool GetOdometerSys()
+        {
+            return isOdometerSys;
+        }
+
+        // Get Odometer Value
+        //
+        // @return the odometer value
+        public int GetOdometerValue()
+        {
+            return odometerValue;
+        }
+
+        // Get Out Temperature
+        //
+        // @return the out temperature
+        public int GetOutTemp()
+        {
+            return outTemp;
+        }
+
+        // Get Trip A Dist
+        //
+        // @return the Trip A distance
+        public int GetTripADist()
+        {
+            return tripADist;
+        }
+
+        // Get Trip B Dist
+        //
+        // @return the Trip B distance
+        public int GetTripBDist()
+        {
+            return tripBDist;
+        }
+
+        // Get Warning Message State
+        //
+        // @return the warning message state
+        public int GetWarningMessageState()
+        {
+            return warningMessageState;
+        }
+
+        // Set Display Temperature
+        //
+        // Set whether or not the out temperature is being shown
+        public void SetDisplayTemp(bool val)
+        {
+            isOutTemp = val;
+        }
+
+        // Set Inside Temperature
+        //
+        // Set the temperature inside of the vehicle.
+        public void SetInTemp(int temp)
+        {
+            inTemp = temp;
+        }
+
+        // Set Metric Units
+        //
+        // Set whether or not the units are metric
+        public void SetMetricUnits(bool val)
+        {
+            isMetricUnits = val;
+        }
+
+        // Set Odometer System
+        //
+        // Update the System Status to either show the odometer value or the
+        // distance to the next oil change
+        // @param whether or not the odometer value should be shown
+        public void SetOdometerSys(bool val)
+        {
+            isOdometerSys = val;
+        }
+
+        // Set Odometer Value
+        //
+        // Update the odometer value by the supplied value
+        // @param the odometer value to add to the odometer value
+        public void SetOdometerValue(int val)
+        {
+            odometerValue += val;
+        }
+
+        // Set Oil Change
+        //
+        // Update the miles till the next oil change value
+        // @param the new number of miles to the next oil change
+        public void SetOilChangeDist(int val)
+        {
+            milesTillNextChange = val;
+        }
+
+        // Set Outside Temperature
+        // 
+        // Set the temperature inside the vehicle.
+        public void SetOutTemp(int temp)
+        {
+            outTemp = temp;
+        }
+
+        // Set Trip A Distance
+        //
+        // Set the Trip A distance
+        public void SetTripADist(int val)
+        {
+            tripADist = val;
+        }
+
+        // Set Trip B Distance
+        //
+        // Set the Trip B distance
+        public void SetTripBDist(int val)
+        {
+            tripBDist = val;
+        }
+
+        // Set Warning Message State
+        //
+        // Set the warning message state to the supplied value
+        // @param val to set the warning state
+        public void SetWarningMessageState(int val)
+        {
+            //warningMessageState = (val % 2);
+            warningMessageState = (val % 3);
+        }
     }
 }
