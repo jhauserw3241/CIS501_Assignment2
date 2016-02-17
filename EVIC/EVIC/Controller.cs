@@ -9,8 +9,243 @@ namespace EVIC
     {
         private Model data = new Model();
 
+        //// Increment Odometer
+        ////
+        //// Increment the odometer by one mile and all of the
+        //// related values
+        //public void IncrementOdometer()
+        //{
+        //    // Increment the odometer count
+        //    data.odometerValue++;
+
+        //    // Decrement the number of miles till next oil change
+        //    data.milesTillNextChange--;
+
+        //    // Modify the trip information
+        //    if (data.tripADist < 0)
+        //    {
+        //        data.tripADist--;
+        //    }
+        //    else if ((data.tripADist == 0) && (data.tripBDist < 0))
+        //    {
+        //        data.tripBDist--;
+        //    }
+        //    else
+        //    {
+        //        /* Remove this code when debugging is done */
+        //        Console.WriteLine( "You have reached the end of both trips" );
+        //    }
+        //}
+
+        // Update Warning Message Type
+        //
+        // Move the warning message state to the next state
+        public void UpdateWarningMessageState()
+        {
+            data.SetWarningMessageState(data.GetWarningMessageState() + 1);
+        }
+
+        // Toggle Metric Units
+        //
+        // Toggle whether or not the values are outputted in metric
+        public void ToggleMetricUnits()
+        {
+            data.SetMetricUnits(!data.IsMetricUnits());
+        }
+
+        // Toggle Display Temp
+        //
+        // Toggle whether or not the display temperature is the outside temperature
+        public void ToggleDisplayTemp()
+        {
+            data.SetDisplayTemp(!data.IsOutTemp());
+        }
+
+        // Reset Trip A Distance
+        //
+        // Reset the Trip A distance value
+        public void ResetTripADist()
+        {
+            data.SetTripADist(0);
+        }
+
+        // Reset Trip B Distance
+        //
+        // Reset the Trip B distance value
+        public void ResetTripBDist()
+        {
+            data.SetTripBDist(0);
+        }
+
+        // Reset Current Trip Distance
+        //
+        // Reset the current trip distance value
+        public void ResetCurrentTripDist()
+        {
+            if (data.IsTripA())
+            {
+                ResetTripADist();
+            }
+            else
+            {
+                ResetTripBDist();
+            }
+        }
+
+        // Get Category Value String
+        //
+        // Get the category value string that correlates with the
+        // category name
+        public string GetCategoryValueString(string categoryName)
+        {
+            string categoryValue;
+
+            if (categoryName == "System Status")
+            {
+                categoryValue = "[" + data.GetOdometerValue().ToString() + " mi]";
+            }
+            else if (categoryName == "Door Ajar")
+            {
+                categoryValue = "[" + data.IsDoorAjar().ToString() + "]";
+            }
+            else if (categoryName == "Check Engine")
+            {
+                categoryValue = "[" + data.IsCheckEngine().ToString() + "]";
+            }
+            else if (categoryName == "System Info")
+            {
+                if()
+                categoryValue = "[Oil change in " + data.GetMilesTillNextChange().ToString() + " mi]";
+            }
+            else if (categoryName == "Units")
+            {
+                // Determine whether the current units are US or metric
+                if (!data.IsMetricUnits())
+                {
+                    categoryValue = "[US Units]";
+                }
+                else
+                {
+                    categoryValue = "[Metric Units]";
+                }
+            }
+            else if ((categoryName == "Temp Info") || (categoryName == "Toggle Temp Info"))
+            {
+                // Determine whether the current temperature is the outside or inside temperature
+                if (data.IsOutTemp())
+                {
+                    categoryValue = "[" + data.GetOutTemp().ToString() + " F Outside]";
+                }
+                else
+                {
+                    categoryValue = "[" + data.GetInTemp().ToString() + " F Inside]";
+                }
+            }
+            else if ((categoryName == "Trip Info") || (categoryName == "Toggle Trip Info"))
+            {
+                // Determine whether the current trip is trip A or B
+                if (data.IsTripA())
+                {
+                    categoryValue = "[Trip-A: " + data.GetTripADist().ToString() + " mi]";
+                }
+                else
+                {
+                    categoryValue = "[Trip-B: " + data.GetTripBDist().ToString() + " mi]";
+                }
+            }
+            else if (categoryName == "Warning Messages")
+            {
+                // Determine which state the user is on currently
+                if (data.GetWarningMessageState() == 0)
+                {
+                    categoryValue = "[Door Ajar:" + data.IsDoorAjar().ToString() + "]";
+                }
+                else if (data.GetWarningMessageState() == 1)
+                {
+                    categoryValue = "[Check Engine Soon: " + data.IsCheckEngine().ToString() + "]";
+                }
+                else if (data.GetWarningMessageState() == 2)
+                {
+                    categoryValue = "[Oil change in " + data.GetMilesTillNextChange().ToString() + " mi]";
+                }
+                else
+                {
+                    categoryValue = "Error";
+                }
+
+                // Update the warning message state
+                UpdateWarningMessageState();
+            }
+            else
+            {
+                // Create a string full of spaces as a place holder
+                categoryValue = new String(' ', categoryName.Length);
+            }
+
+            return categoryValue;
+        }
+
+        public List<string> GetArrowDirectionStrings(string arrowDir, int length)
+        {
+            // Define variables
+            List<string> output = new List<string>();
+            string intermediateLine = new String(' ', length);
+            string sidewaysArrowIntermediate = new String(' ', (length - 2));
+            string uprightArrowIntermediate = new String(' ', (length - 1));
+            string upDownArrowIntermediate = new String(' ', (length - 2));
+            string errorIntermediate = new String(' ', (length - 5));
+            string escapeIntermediate = new String(' ', (length - 3));
+            string spaceIntermediate = new String(' ', (length - 5));
+
+            if (arrowDir == "left")
+            {
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + sidewaysArrowIntermediate + "<-|");
+            }
+            else if (arrowDir == "up")
+            {
+                output.Add("|" + uprightArrowIntermediate + "^|");
+                output.Add("|" + uprightArrowIntermediate + "||");
+            }
+            else if (arrowDir == "right")
+            {
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + sidewaysArrowIntermediate + "->|");
+            }
+            else if (arrowDir == "down")
+            {
+                output.Add("|" + uprightArrowIntermediate + "||");
+                output.Add("|" + uprightArrowIntermediate + "v|");
+            }
+            else if (arrowDir == "up&down")
+            {
+                output.Add("|" + upDownArrowIntermediate + "^||");
+                output.Add("|" + upDownArrowIntermediate + "|v|");
+            }
+            else if (arrowDir == "escape")
+            {
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + escapeIntermediate + "Esc|");
+            }
+            else if (arrowDir == "space")
+            {
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + spaceIntermediate + "space|");
+            }
+            else
+            {
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + errorIntermediate + "error|");
+            }
+
+            return output;
+        }
+
         // Display Option
         //
+        // @param categoryName A list of names of the category options presented
+        //      to the user
+        // @param arrowDir A list of arrow directions for the various category options
         // @return the string array for the option information
         public List<List<string>> DisplayOption(List<string> categoryName, List<string> arrowDir)
         {
@@ -27,61 +262,9 @@ namespace EVIC
             // Add the information for all of the options
             for (int i = 0; i < categoryName.Count; i++)
             {
-                // Check if there is some sort of number to be outputted
-                string categoryValue;
-                if (categoryName[i] == "System Status")
-                {
-                    categoryValue = "[" + data.odometerValue.ToString() + " mi]";
-                }
-                else if (categoryName[i] == "Door Ajar")
-                {
-                    categoryValue = "[" + data.doorAjar.ToString() + "]";
-                }
-                else if (categoryName[i] == "Check Engine")
-                {
-                    categoryValue = "[" + data.checkEngine.ToString() + "]";
-                }
-                else if (categoryName[i] == "Oil Change")
-                {
-                    categoryValue = "[Oil change in" + data.milesTillNextChange.ToString() + " mi]";
-                }
-                else if (categoryName[i] == "Units")
-                {
-                    if (!data.isMetricUnits)
-                    {
-                        categoryValue = "[US Units]";
-                    }
-                    else
-                    {
-                        categoryValue = "[Metric Units]";
-                    }
-                }
-                else if (categoryName[i] == "Temp Info")
-                {
-                    if (data.isOutTemp)
-                    {
-                        categoryValue = "[" + data.outTemp.ToString() + " F Outside]";
-                    }
-                    else
-                    {
-                        categoryValue = "[" + data.inTemp.ToString() + " F Inside]";
-                    }
-                }
-                else if (categoryName[i] == "Trip Info")
-                {
-                    if (data.isTripA)
-                    {
-                        categoryValue = "[Trip-A: " + data.tripADist + " mi]";
-                    }
-                    else
-                    {
-                        categoryValue = "[Trip-B: " + data.tripBDist + " mi]";
-                    }
-                }
-                else
-                {
-                    categoryValue = new String(' ', categoryName[i].Length);
-                }
+                output = new List<string>();
+                // Get the value to be outputted
+                string categoryValue = GetCategoryValueString(categoryName[i]);
 
                 // Determine the length of the option display
                 if (displayLength < categoryName[i].Length)
@@ -94,53 +277,27 @@ namespace EVIC
                 }
 
                 // Create boundary
-                string topBottomBoundary = new String('-', displayLength);
+                string topBottomBoundary = new String('-', (displayLength + 2));
                 string intermediateLine = new String(' ', displayLength);
-                string sidewaysArrowIntermediate = new String(' ', (displayLength - 2));
-                string uprightArrowIntermediate = new String(' ', (displayLength - 1));
-                string upDownArrowIntermediate = new String(' ', (displayLength - 2));
-                string errorIntermediate = new String(' ', (displayLength - 5));
+                string categoryNameBuffer = new String(' ', (displayLength - categoryName[i].Length));
+                string categoryValueBuffer = new String(' ', (displayLength - categoryValue.Length));
+
+                // Get the arrow lines
+                List<string> arrowOutput = GetArrowDirectionStrings(arrowDir[i], displayLength);
 
                 // Add the lines to the display array
                 output.Add(topBottomBoundary);
-                output.Add("|" + categoryName + "|");
-                output.Add("|" + categoryValue + "|");
-                if (arrowDir[i] == "left")
+                output.Add("|" + categoryNameBuffer + categoryName[i] + "|");
+                output.Add("|" + categoryValueBuffer + categoryValue + "|");
+                for (int j = 0; j < arrowOutput.Count; j++)
                 {
-                    output.Add("|" + intermediateLine + "|");
-                    output.Add("|" + sidewaysArrowIntermediate + "<-|");
-                }
-                else if (arrowDir[i] == "up")
-                {
-                    output.Add("|" + sidewaysArrowIntermediate + "^|");
-                    output.Add("|" + sidewaysArrowIntermediate + "||");
-                }
-                else if (arrowDir[i] == "right")
-                {
-                    output.Add("|" + intermediateLine + "|");
-                    output.Add("|" + sidewaysArrowIntermediate + "->|");
-                }
-                else if (arrowDir[i] == "down")
-                {
-                    output.Add("|" + sidewaysArrowIntermediate + "||");
-                    output.Add("|" + sidewaysArrowIntermediate + "v|");
-                }
-                else if (arrowDir[i] == "up&down")
-                {
-                    output.Add("|" + upDownArrowIntermediate + "^||");
-                    output.Add("|" + upDownArrowIntermediate + "|v|");
-                }
-                else
-                {
-                    output.Add("|" + intermediateLine + "|");
-                    output.Add("|" + errorIntermediate + "error|");
+                    output.Add(arrowOutput[j]);
                 }
                 output.Add(topBottomBoundary);
                 output.Add(" " + intermediateLine + " ");
                 totalOutput.Add(output);
 
                 // Reset variables
-                output.Clear();
                 displayLength = 0;
             }
 

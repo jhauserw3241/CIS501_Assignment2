@@ -9,13 +9,14 @@ namespace EVIC
     {
         private Controller controllerInfo = new Controller();
 
-        // Main
+        // Read Info
         //
         // Interact with the user to display the information for the program
         public void ReadInfo()
         {
             Console.WriteLine("Started dashboard display successfully!");
             SystemStatusMap();
+            return;
         }
 
         // System Status Map
@@ -23,13 +24,79 @@ namespace EVIC
         // Display and handle the system status options
         public void SystemStatusMap()
         {
-            Console.WriteLine("started system status map");
-            // Output options
+            // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
                 "Trip Info",
-                "Oil Change",
-                "Warning Messages"
+                "System Info",
+                "Warning Messages",
+                "Quit Display"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "left",
+                "up&down",
+                "right",
+                "escape"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
+
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.LeftArrow == input)
+            {
+                Console.WriteLine("Left");
+                TripInfoMap();
+            }
+            else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
+            {
+                //Console.WriteLine("Up or Down");
+                //NextOilChangeMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                //Console.WriteLine("Right");
+                WarningMessagesMap();
+            } 
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
+            }
+            Console.ReadKey();
+        }
+
+        // Set and Display Options
+        //
+        // Set and display the user's options for how to proceed
+        public void SetDisplayOptions(List<string> categories, List<string> dirs)
+        {
+            // Get the data for the options to output to the user
+            List<List<string>> optionArgs = controllerInfo.DisplayOption(categories, dirs);
+            int numOptions = optionArgs.Count;
+            int numLines = optionArgs[0].Count;
+
+            // Output the options to the user
+            for (int i = 0; i < numLines; i++)
+            {
+                for (int j = 0; j < numOptions; j++)
+                {
+                    Console.Write(optionArgs[j][i]);
+                }
+                Console.WriteLine("");
+            }
+        }
+
+        // Warning Messages Map
+        //
+        // Display and handle the warning messages options
+        public void WarningMessagesMap()
+        {
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
+            {
+                "System Status",
+                "Warning Messages",
+                "Personal Settings"
             };
             List<string> arrowDirs = new List<string>()
             {
@@ -37,206 +104,168 @@ namespace EVIC
                 "up&down",
                 "right"
             };
-            List<List<string>> optionArgs = controllerInfo.DisplayOption(categoryNames, arrowDirs);
-            Console.WriteLine("Number of options: " + optionArgs.Count);
-            for (int i = 0; i < optionArgs.Count; i++)
-            {
-                Console.WriteLine("Option: " + i.ToString());
-                int numArgs = optionArgs[i].Count;
-                Console.WriteLine("number of lines in current option: " + optionArgs[i]);
-                for (int j = 0; j < optionArgs[i].Count; j++)
-                {
-                    Console.Write("Option: " + i.ToString() + " Row: " + j.ToString());
-                    Console.Write(optionArgs[i][j].ToString());
-                }
-                Console.WriteLine();
-            }
+            SetDisplayOptions(categoryNames, arrowDirs);
 
             // Interpret the user's choice
             ConsoleKey input = Console.ReadKey().Key;
             if (ConsoleKey.LeftArrow == input)
             {
-                Console.WriteLine("Left");
-                //WarningMessagesMap();
+                SystemStatusMap();
             }
-            else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
+            else if (ConsoleKey.UpArrow == input)
             {
-                Console.WriteLine("Up or Down");
-                //NextOilChangeMap();
+                WarningMessagesMap();
             }
             else if (ConsoleKey.RightArrow == input)
             {
-                Console.WriteLine("Right");
-                //TripInfoMap();
+                PersonalSettingsMap();
             }
             else
             {
-                Console.WriteLine("Invalid option");
+                Console.WriteLine("Error: Invalid option");
             }
         }
 
-        //// Warning Messages Map
-        ////
-        //// Display and handle the warning messages options
-        //public static void WarningMessagesMap()
-        //{
-        //    // Output options
-        //    Console.WriteLine("      Warning Messages");
-        //    Console.WriteLine("Hardware Warning Messages");
-        //    Console.WriteLine("           ^");
-        //    Console.WriteLine("           |  -> Personal Settings");
+        // Personal Settings Map
+        //
+        // Display and handle the personal settings options
+        public void PersonalSettingsMap()
+        {
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
+            {
+                "Units",
+                "Temp Info",
+                "Toggle Units",
+                "System Status"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "up",
+                "right",
+                "space",
+                "escape"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
 
-        //    // Interpret the user's choice
-        //    ConsoleKey input = Console.ReadKey().Key;
-        //    if (ConsoleKey.UpArrow == input)
-        //    {
-        //        // Display whether or not the door is ajar
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.UpArrow == input)
+            {
+                PersonalSettingsMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                TemperatureDisplayMap();
+            }
+            else if (ConsoleKey.Spacebar == input)
+            {
+                controllerInfo.ToggleMetricUnits();
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
+            }
+        }
 
-        //        // Display whether or not the engine should be checked
+        // Temperature Display Map
+        //
+        // Display and handle the temperature display options
+        public void TemperatureDisplayMap()
+        {
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
+            {
+                "Personal Settings",
+                "Toggle Temp Info",
+                "Trip Info",
+                "System Status"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "left",
+                "up&down",
+                "right",
+                "escape"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
 
-        //        // Display the number of miles till the next oil change needs to be made
-        //        NextOilChangeMap();
-        //    }
-        //    else if (ConsoleKey.RightArrow == input)
-        //    {
-        //        TripInfoMap();
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Invalid option");
-        //    }
-        //}
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.LeftArrow == input)
+            {
+                PersonalSettingsMap();
+            }
+            else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
+            {
+                controllerInfo.ToggleMetricUnits();
+                TemperatureDisplayMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                TripInfoMap();
+            }
+            else if (ConsoleKey.Escape == input)
+            {
+                SystemStatusMap();
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
+            }
+        }
 
-        //// Personal Settings Map
-        ////
-        //// Display and handle the personal settings options
-        //public static void PersonalSettingsMap()
-        //{
-        //    // Output options
-        //    Console.WriteLine("    Personal Settings");
-        //    Console.WriteLine("Change Units");
-        //    Console.WriteLine("     ^");
-        //    Console.WriteLine("     |  -> Temperature Display");
+        // Trip Info Map
+        //
+        // Display and handle the trip information options
+        public void TripInfoMap()
+        {
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
+            {
+                "Temp Info",
+                "Toggle Trip Info",
+                "System Status",
+                "Reset Trip Info"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "left",
+                "up&down",
+                "right",
+                "space"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
 
-        //    // Interpret the user's choice
-        //    ConsoleKey input = Console.ReadKey().Key;
-        //    if (ConsoleKey.UpArrow == input)
-        //    {
-        //        // Toggle the units
-        //        while (true == UnitToggle())
-        //        {
-        //            Console.Write("The units have successfully been toggled to ");
-        //            if (!Model.isMetricUnits)
-        //            {
-        //                Console.WriteLine("US units.");
-        //            }
-        //            else
-        //            {
-        //                Console.WriteLine("metric units.");
-        //            }
-        //        }
-
-        //        // Go back to the system status map
-        //        SystemStatusMap();
-        //    }
-        //    else if (ConsoleKey.RightArrow == input)
-        //    {
-        //        TemperatureDisplayMap();
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Invalid option");
-        //    }
-        //}
-
-        //// Temperature Display Map
-        ////
-        //// Display and handle the temperature display options
-        //public static void TemperatureDisplayMap()
-        //{
-        //    // Output options
-        //    Console.WriteLine("            Temperature Information");
-        //    Console.WriteLine("           Toggle Temperature Source");
-        //    Console.WriteLine("                      ^ |");
-        //    Console.WriteLine("Personal Settings <-  | v  -> Trip Info");
-
-        //    // Interpret the user's choice
-        //    ConsoleKey input = Console.ReadKey().Key;
-        //    if (ConsoleKey.LeftArrow == input)
-        //    {
-        //        PersonalSettingsMap();
-        //    }
-        //    else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
-        //    {
-        //        // Toggle the temperature source
-        //        while (TemperatureSourceToggle())
-        //        {
-        //            Console.Write("The units have successfully been toggled to ");
-        //            if (!Model.isMetricUnits)
-        //            {
-        //                Console.WriteLine("US units.");
-        //            }
-        //            else
-        //            {
-        //                Console.WriteLine("metric units.");
-        //            }
-        //        }
-        //    }
-        //    else if (ConsoleKey.RightArrow == input)
-        //    {
-        //        TripInfoMap();
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Invalid option");
-        //    }
-        //}
-
-        //// Trip Info Map
-        ////
-        //// Display and handle the trip information options
-        //public static void TripInfoMap()
-        //{
-        //    // Output options
-        //    Console.WriteLine("                  Trip Info");
-        //    Console.WriteLine("           Toggle Trip Information");
-        //    Console.WriteLine("                     ^ |");
-        //    Console.WriteLine("Temperature Info <-  | v  -> System Status");
-        //    Console.WriteLine("       <space-bar> Reset Trip Distance");
-
-        //    // Interpret the user's choice
-        //    ConsoleKey input = Console.ReadKey().Key;
-        //    if (ConsoleKey.LeftArrow == input)
-        //    {
-        //        TemperatureDisplayMap();
-        //    }
-        //    else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
-        //    {
-        //        // Print out the results for the current trip
-        //        if (Model.isTripA)
-        //        {
-        //            Console.WriteLine("[Trip-A: " + Model.tripADist.ToString() + " mi]");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("[Trip-B: " + Model.tripBDist.ToString() + " mi]");
-        //        }
-        //        Model.isTripA = !Model.isTripA;
-        //    }
-        //    else if (ConsoleKey.RightArrow == input)
-        //    {
-        //        SystemStatusMap();
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Invalid option");
-        //    }
-        //}
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.LeftArrow == input)
+            {
+                TemperatureDisplayMap();
+            }
+            else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
+            {
+                TripInfoMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                SystemStatusMap();
+            }
+            else if (ConsoleKey.Spacebar == input)
+            {
+                controllerInfo.ResetCurrentTripDist();
+                TripInfoMap();
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
+            }
+        }
 
         //// Next Oil Change Map
         ////
         //// Display and handle the mills till the next oil change options
-        //public static void NextOilChangeMap()
+        //public void NextOilChangeMap()
         //{
         //    throw new System.NotImplementedException();
         //}
@@ -244,7 +273,7 @@ namespace EVIC
         //// Unit Toggle
         ////
         //// Toggle the units from US to metric or vice versa
-        //public static bool UnitToggle()
+        //public bool UnitToggle()
         //{
         //    // Toggle the units from US to metric units
         //    Console.WriteLine("Toggle units: (US/Metric)");
@@ -263,7 +292,7 @@ namespace EVIC
         //// Temperature Source Toggle
         ////
         //// Toggle between outside and inside temperature information
-        //public static bool TemperatureSourceToggle()
+        //public bool TemperatureSourceToggle()
         //{
         //    // Output options
         //    Console.WriteLine(" Temperature Information");
