@@ -3,28 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using EVIC.DashboardDisplay;
 
 namespace EVIC
 {
     class Program
     {
-        private DashboardDisplay display = new DashboardDisplay();
-        private Simulator sim = new Simulator();
-
-        // Main
-        //
-        // Run this code when the program starts
-        static void Main()
+        public DashboardDisplay DashboardDisplay
         {
-            Program currentProgram = new Program();
-            currentProgram.ProvideUserOptions();
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
         }
 
-        // Provide User Options
-        //
-        // Provider the user the option of using the Dashboard
-        // Display or the Simulator
-        public void ProvideUserOptions()
+
+        public Simulator Simulator
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+            set
+            {
+            }
+        }
+
+        static void Main()
         {
             // Offer the user option
             Console.WriteLine("Which program would you like to use?(1 or 2)");
@@ -32,14 +40,13 @@ namespace EVIC
             Console.WriteLine("2.) Simulator");
 
             // Interpret the user's choice
-            string input = Console.ReadLine();
-            if (input.Equals("1"))
+            if (Console.Read() == 1)
             {
-                display.ReadInfo();
+                DashboardDisplay.ReadInfo();
             }
-            else if (input.Equals("2"))
+            else if (Console.Read() == 2)
             {
-                sim.ModifyInfo();
+                Simulator.ModifyInfo();
             }
             else
             {
