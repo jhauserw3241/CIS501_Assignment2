@@ -7,6 +7,7 @@
         private bool doorAjar = false;
         private int inTemp = 0;
         private bool isMetricUnits = false;
+        private bool isOdometerSys = true;
         private bool isOutTemp = false;
         private bool isTripA = true;
         private int milesTillNextChange = 3000;
@@ -34,14 +35,6 @@
             return doorAjar;
         }
 
-        // Get In Temp
-        //
-        // @return the internal temp of the car
-        public int GetInTemp()
-        {
-            return inTemp;
-        }
-
         // Is Metric Units
         //
         // @return whether or not the output should be display in metric units
@@ -50,7 +43,7 @@
             return isMetricUnits;
         }
 
-        // Is Out Temp
+        // Is Out Temperature
         //
         // @return whether or not the output temperature should be the internal temperature
         //      of the car or the temperature of the outside
@@ -67,12 +60,28 @@
             return isTripA;
         }
 
+        // Get In Temp
+        //
+        // @return the internal temp of the car
+        public int GetInTemp()
+        {
+            return inTemp;
+        }
+
         // Get Miles Till Next Change
         //
         // @return the number of miles till the next oil change
         public int GetMilesTillNextChange()
         {
             return milesTillNextChange;
+        }
+
+        // Set Odometer System
+        //
+        // @return whether or not the odometer should be outputted for the System Status
+        public bool GetOdometerSys()
+        {
+            return isOdometerSys;
         }
 
         // Get Odometer Value
@@ -83,7 +92,7 @@
             return odometerValue;
         }
 
-        // Get Out Temp
+        // Get Out Temperature
         //
         // @return the out temperature
         public int GetOutTemp()
@@ -115,23 +124,12 @@
             return warningMessageState;
         }
 
-        // Set Odometer Value
+        // Set Display Temperature
         //
-        // Update the odometer value by the supplied value
-        // @param the odometer value to add to the odometer value
-        public void SetOdometerValue(int val)
+        // Set whether or not the out temperature is being shown
+        public void SetDisplayTemp(bool val)
         {
-            odometerValue += val;
-        }
-
-        // Set Warning Message State
-        //
-        // Set the warning message state to the supplied value
-        // @param val to set the warning state
-        public void SetWarningMessageState(int val)
-        {
-            //warningMessageState = (val % 2);
-            warningMessageState = (val % 3);
+            isOutTemp = val;
         }
 
         // Set Metric Units
@@ -142,12 +140,32 @@
             isMetricUnits = val;
         }
 
-        // Set Display Temperature
+        // Set Odometer System
         //
-        // Set whether or not the out temperature is being shown
-        public void SetDisplayTemp(bool val)
+        // Update the System Status to either show the odometer value or the
+        // distance to the next oil change
+        // @param whether or not the odometer value should be shown
+        public void SetOdometerSys(bool val)
         {
-            isOutTemp = val;
+            isOdometerSys = val;
+        }
+
+        // Set Odometer Value
+        //
+        // Update the odometer value by the supplied value
+        // @param the odometer value to add to the odometer value
+        public void SetOdometerValue(int val)
+        {
+            odometerValue += val;
+        }
+
+        // Set Oil Change
+        //
+        // Update the miles till the next oil change value
+        // @param the new number of miles to the next oil change
+        public void SetOilChangeDist(int val)
+        {
+            milesTillNextChange = val;
         }
 
         // Set Trip A Distance
@@ -164,6 +182,16 @@
         public void SetTripBDist(int val)
         {
             tripBDist = val;
+        }
+
+        // Set Warning Message State
+        //
+        // Set the warning message state to the supplied value
+        // @param val to set the warning state
+        public void SetWarningMessageState(int val)
+        {
+            //warningMessageState = (val % 2);
+            warningMessageState = (val % 3);
         }
     }
 }

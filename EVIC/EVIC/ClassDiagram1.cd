@@ -25,7 +25,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="EVIC.Model">
-    <Position X="6.25" Y="1.25" Width="1.5" />
+    <Position X="6" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgBBAKCCCAQAAAAGgIAAAMoBAAA0AAIAoAAIIQCAAAI=</HashCode>
       <FileName>Model.cs</FileName>

@@ -17,34 +17,45 @@ namespace EVIC
         static void Main()
         {
             Program currentProgram = new Program();
-            currentProgram.ProvideUserOptions();
+            int status = 0;
+            while (status == 0)
+            {
+                status = currentProgram.ProvideUserOptions();
+            }
         }
 
         // Provide User Options
         //
         // Provider the user the option of using the Dashboard
         // Display or the Simulator
-        public void ProvideUserOptions()
+        public int ProvideUserOptions()
         {
             // Offer the user option
-            Console.WriteLine("Which program would you like to use?(1 or 2)");
+            Console.WriteLine("Which program would you like to use?(1, 2, or 3)");
             Console.WriteLine("1.) Dashboard Display");
             Console.WriteLine("2.) Simulator");
+            Console.WriteLine("3.) Quit Program");
 
             // Interpret the user's choice
             string input = Console.ReadLine();
             if (input.Equals("1"))
             {
                 display.ReadInfo();
+                return 0;
             }
             else if (input.Equals("2"))
             {
                 sim.ModifyInfo();
+                return 0;
+            }
+            else if (input.Equals("3"))
+            {
+                return 1;
             }
             else
             {
-                Console.Write("Invalid option");
-                Console.ReadKey();
+                Console.Write("Error: Invalid option");
+                return 0;
             }
         }
     }

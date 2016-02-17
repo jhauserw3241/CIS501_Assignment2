@@ -9,34 +9,26 @@ namespace EVIC
     {
         private Controller controllerInfo = new Controller();
 
-        // Read Info
+        // Personal Settings Map
         //
-        // Interact with the user to display the information for the program
-        public void ReadInfo()
-        {
-            Console.WriteLine("Started dashboard display successfully!");
-            SystemStatusMap();
-            return;
-        }
-
-        // System Status Map
-        //
-        // Display and handle the system status options
-        public void SystemStatusMap()
+        // Display and handle the personal settings options
+        public void PersonalSettingsMap()
         {
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
-                "Trip Info",
-                "System Info",
                 "Warning Messages",
-                "Quit Display"
+                "Units",
+                "Temp Info",
+                "Toggle Units",
+                "System Status"
             };
             List<string> arrowDirs = new List<string>()
             {
                 "left",
-                "up&down",
+                "up",
                 "right",
+                "space",
                 "escape"
             };
             SetDisplayOptions(categoryNames, arrowDirs);
@@ -45,24 +37,35 @@ namespace EVIC
             ConsoleKey input = Console.ReadKey().Key;
             if (ConsoleKey.LeftArrow == input)
             {
-                Console.WriteLine("Left");
-                TripInfoMap();
+                WarningMessagesMap();
             }
-            else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
+            else if (ConsoleKey.UpArrow == input)
             {
-                //Console.WriteLine("Up or Down");
-                //NextOilChangeMap();
+                PersonalSettingsMap();
             }
             else if (ConsoleKey.RightArrow == input)
             {
-                //Console.WriteLine("Right");
-                WarningMessagesMap();
-            } 
+                TemperatureDisplayMap();
+            }
+            else if (ConsoleKey.Spacebar == input)
+            {
+                controllerInfo.ToggleMetricUnits();
+                PersonalSettingsMap();
+            }
             else
             {
                 Console.WriteLine("Error: Invalid option");
             }
-            Console.ReadKey();
+        }
+
+        // Read Info
+        //
+        // Interact with the user to display the information for the program
+        public void ReadInfo()
+        {
+            Console.WriteLine("Started dashboard display successfully!");
+            SystemStatusMap();
+            return;
         }
 
         // Set and Display Options
@@ -86,62 +89,24 @@ namespace EVIC
             }
         }
 
-        // Warning Messages Map
+        // System Status Map
         //
-        // Display and handle the warning messages options
-        public void WarningMessagesMap()
+        // Display and handle the system status options
+        public void SystemStatusMap()
         {
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
-                "System Status",
+                "Trip Info",
+                "System Info",
                 "Warning Messages",
-                "Personal Settings"
+                "Reset Oil",
+                "Quit Display"
             };
             List<string> arrowDirs = new List<string>()
             {
                 "left",
                 "up&down",
-                "right"
-            };
-            SetDisplayOptions(categoryNames, arrowDirs);
-
-            // Interpret the user's choice
-            ConsoleKey input = Console.ReadKey().Key;
-            if (ConsoleKey.LeftArrow == input)
-            {
-                SystemStatusMap();
-            }
-            else if (ConsoleKey.UpArrow == input)
-            {
-                WarningMessagesMap();
-            }
-            else if (ConsoleKey.RightArrow == input)
-            {
-                PersonalSettingsMap();
-            }
-            else
-            {
-                Console.WriteLine("Error: Invalid option");
-            }
-        }
-
-        // Personal Settings Map
-        //
-        // Display and handle the personal settings options
-        public void PersonalSettingsMap()
-        {
-            // Display the data for the options to output to the user
-            List<string> categoryNames = new List<string>()
-            {
-                "Units",
-                "Temp Info",
-                "Toggle Units",
-                "System Status"
-            };
-            List<string> arrowDirs = new List<string>()
-            {
-                "up",
                 "right",
                 "space",
                 "escape"
@@ -150,22 +115,34 @@ namespace EVIC
 
             // Interpret the user's choice
             ConsoleKey input = Console.ReadKey().Key;
-            if (ConsoleKey.UpArrow == input)
+            if (ConsoleKey.LeftArrow == input)
             {
-                PersonalSettingsMap();
+                //Console.WriteLine("Left");
+                TripInfoMap();
+            }
+            else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
+            {
+                SystemStatusMap();
             }
             else if (ConsoleKey.RightArrow == input)
             {
-                TemperatureDisplayMap();
+                //Console.WriteLine("Right");
+                WarningMessagesMap();
             }
             else if (ConsoleKey.Spacebar == input)
             {
-                controllerInfo.ToggleMetricUnits();
+                controllerInfo.ResetOilChange();
+                SystemStatusMap();
+            }
+            else if (ConsoleKey.Escape == input)
+            {
+                return;
             }
             else
             {
                 Console.WriteLine("Error: Invalid option");
             }
+            Console.ReadKey();
         }
 
         // Temperature Display Map
@@ -198,7 +175,7 @@ namespace EVIC
             }
             else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
             {
-                controllerInfo.ToggleMetricUnits();
+                controllerInfo.ToggleDisplayTemp();
                 TemperatureDisplayMap();
             }
             else if (ConsoleKey.RightArrow == input)
@@ -262,66 +239,44 @@ namespace EVIC
             }
         }
 
-        //// Next Oil Change Map
-        ////
-        //// Display and handle the mills till the next oil change options
-        //public void NextOilChangeMap()
-        //{
-        //    throw new System.NotImplementedException();
-        //}
+        // Warning Messages Map
+        //
+        // Display and handle the warning messages options
+        public void WarningMessagesMap()
+        {
+            // Display the data for the options to output to the user
+            List<string> categoryNames = new List<string>()
+            {
+                "System Status",
+                "Warning Messages",
+                "Personal Settings"
+            };
+            List<string> arrowDirs = new List<string>()
+            {
+                "left",
+                "up&down",
+                "right"
+            };
+            SetDisplayOptions(categoryNames, arrowDirs);
 
-        //// Unit Toggle
-        ////
-        //// Toggle the units from US to metric or vice versa
-        //public bool UnitToggle()
-        //{
-        //    // Toggle the units from US to metric units
-        //    Console.WriteLine("Toggle units: (US/Metric)");
-
-        //    if (" " == Console.ReadLine())
-        //    {
-        //        Model.isMetricUnits = !Model.isMetricUnits;
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        //// Temperature Source Toggle
-        ////
-        //// Toggle between outside and inside temperature information
-        //public bool TemperatureSourceToggle()
-        //{
-        //    // Output options
-        //    Console.WriteLine(" Temperature Information");
-        //    Console.WriteLine("Toggle Temperature Source");
-        //    Console.WriteLine("          ^ |");
-        //    Console.WriteLine("          | v");
-
-        //    // Interpret user input
-        //    ConsoleKey input = Console.ReadKey().Key;
-        //    if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
-        //    {
-        //        // Output the output source
-        //        if (Model.isOutTemp)
-        //        {
-        //            Console.WriteLine(Model.outTemp.ToString() + " F Outside");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine(Model.inTemp.ToString() + " F Inside");
-        //        }
-
-        //        // Convert to the opposite of the current temperature source
-        //        Model.isOutTemp = !Model.isOutTemp;
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
+            // Interpret the user's choice
+            ConsoleKey input = Console.ReadKey().Key;
+            if (ConsoleKey.LeftArrow == input)
+            {
+                SystemStatusMap();
+            }
+            else if (ConsoleKey.UpArrow == input)
+            {
+                WarningMessagesMap();
+            }
+            else if (ConsoleKey.RightArrow == input)
+            {
+                PersonalSettingsMap();
+            }
+            else
+            {
+                Console.WriteLine("Error: Invalid option");
+            }
+        }
     }
 }

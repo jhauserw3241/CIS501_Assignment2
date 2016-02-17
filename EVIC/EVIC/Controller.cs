@@ -9,88 +9,128 @@ namespace EVIC
     {
         private Model data = new Model();
 
-        //// Increment Odometer
-        ////
-        //// Increment the odometer by one mile and all of the
-        //// related values
-        //public void IncrementOdometer()
-        //{
-        //    // Increment the odometer count
-        //    data.odometerValue++;
-
-        //    // Decrement the number of miles till next oil change
-        //    data.milesTillNextChange--;
-
-        //    // Modify the trip information
-        //    if (data.tripADist < 0)
-        //    {
-        //        data.tripADist--;
-        //    }
-        //    else if ((data.tripADist == 0) && (data.tripBDist < 0))
-        //    {
-        //        data.tripBDist--;
-        //    }
-        //    else
-        //    {
-        //        /* Remove this code when debugging is done */
-        //        Console.WriteLine( "You have reached the end of both trips" );
-        //    }
-        //}
-
-        // Update Warning Message Type
+        // Display Option
         //
-        // Move the warning message state to the next state
-        public void UpdateWarningMessageState()
+        // @param categoryName A list of names of the category options presented
+        //      to the user
+        // @param arrowDir A list of arrow directions for the various category options
+        // @return the string array for the option information
+        public List<List<string>> DisplayOption(List<string> categoryName, List<string> arrowDir)
         {
-            data.SetWarningMessageState(data.GetWarningMessageState() + 1);
-        }
+            List<List<string>> totalOutput = new List<List<string>>();
+            List<string> output = new List<string>();
+            int displayLength = 0;
 
-        // Toggle Metric Units
-        //
-        // Toggle whether or not the values are outputted in metric
-        public void ToggleMetricUnits()
-        {
-            data.SetMetricUnits(!data.IsMetricUnits());
-        }
-
-        // Toggle Display Temp
-        //
-        // Toggle whether or not the display temperature is the outside temperature
-        public void ToggleDisplayTemp()
-        {
-            data.SetDisplayTemp(!data.IsOutTemp());
-        }
-
-        // Reset Trip A Distance
-        //
-        // Reset the Trip A distance value
-        public void ResetTripADist()
-        {
-            data.SetTripADist(0);
-        }
-
-        // Reset Trip B Distance
-        //
-        // Reset the Trip B distance value
-        public void ResetTripBDist()
-        {
-            data.SetTripBDist(0);
-        }
-
-        // Reset Current Trip Distance
-        //
-        // Reset the current trip distance value
-        public void ResetCurrentTripDist()
-        {
-            if (data.IsTripA())
+            // Verify that the number of category names and arrow directions are the same
+            if (categoryName.Count != arrowDir.Count)
             {
-                ResetTripADist();
+                return null;
+            }
+
+            // Add the information for all of the options
+            for (int i = 0; i < categoryName.Count; i++)
+            {
+                output = new List<string>();
+                // Get the value to be outputted
+                string categoryValue = GetCategoryValueString(categoryName[i]);
+
+                // Determine the length of the option display
+                if (displayLength < categoryName[i].Length)
+                {
+                    displayLength = categoryName[i].Length;
+                }
+                if (displayLength < categoryValue.Length)
+                {
+                    displayLength = categoryValue.Length;
+                }
+
+                // Create boundary
+                string topBottomBoundary = new String('-', (displayLength + 2));
+                string intermediateLine = new String(' ', displayLength);
+                string categoryNameBuffer = new String(' ', (displayLength - categoryName[i].Length));
+                string categoryValueBuffer = new String(' ', (displayLength - categoryValue.Length));
+
+                // Get the arrow lines
+                List<string> arrowOutput = GetArrowDirectionStrings(arrowDir[i], displayLength);
+
+                // Add the lines to the display array
+                output.Add(topBottomBoundary);
+                output.Add("|" + categoryNameBuffer + categoryName[i] + "|");
+                output.Add("|" + categoryValueBuffer + categoryValue + "|");
+                for (int j = 0; j < arrowOutput.Count; j++)
+                {
+                    output.Add(arrowOutput[j]);
+                }
+                output.Add(topBottomBoundary);
+                output.Add(" " + intermediateLine + " ");
+                totalOutput.Add(output);
+
+                // Reset variables
+                displayLength = 0;
+            }
+
+            return totalOutput;
+        } // End DisplayOption()
+
+        // Get Arrow Direction Strings
+        //
+        // Get the strings that will tell the user which key they need to press to
+        // achieve the desired operation
+        public List<string> GetArrowDirectionStrings(string arrowDir, int length)
+        {
+            // Define variables
+            List<string> output = new List<string>();
+            string intermediateLine = new String(' ', length);
+            string sidewaysArrowIntermediate = new String(' ', (length - 2));
+            string uprightArrowIntermediate = new String(' ', (length - 1));
+            string upDownArrowIntermediate = new String(' ', (length - 2));
+            string errorIntermediate = new String(' ', (length - 5));
+            string escapeIntermediate = new String(' ', (length - 3));
+            string spaceIntermediate = new String(' ', (length - 5));
+
+            if (arrowDir == "left")
+            {
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + sidewaysArrowIntermediate + "<-|");
+            }
+            else if (arrowDir == "up")
+            {
+                output.Add("|" + uprightArrowIntermediate + "^|");
+                output.Add("|" + uprightArrowIntermediate + "||");
+            }
+            else if (arrowDir == "right")
+            {
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + sidewaysArrowIntermediate + "->|");
+            }
+            else if (arrowDir == "down")
+            {
+                output.Add("|" + uprightArrowIntermediate + "||");
+                output.Add("|" + uprightArrowIntermediate + "v|");
+            }
+            else if (arrowDir == "up&down")
+            {
+                output.Add("|" + upDownArrowIntermediate + "^||");
+                output.Add("|" + upDownArrowIntermediate + "|v|");
+            }
+            else if (arrowDir == "escape")
+            {
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + escapeIntermediate + "Esc|");
+            }
+            else if (arrowDir == "space")
+            {
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + spaceIntermediate + "space|");
             }
             else
             {
-                ResetTripBDist();
+                output.Add("|" + intermediateLine + "|");
+                output.Add("|" + errorIntermediate + "error|");
             }
-        }
+
+            return output;
+        } // End GetArrowDirectionStrings()
 
         // Get Category Value String
         //
@@ -114,8 +154,17 @@ namespace EVIC
             }
             else if (categoryName == "System Info")
             {
-                if()
-                categoryValue = "[Oil change in " + data.GetMilesTillNextChange().ToString() + " mi]";
+                // Determine whether or not to show the odometer value
+                if (data.GetOdometerSys())
+                {
+                    categoryValue = "[" + data.GetOdometerValue().ToString() + " mi]";
+                }
+                else
+                {
+                    categoryValue = "[Oil change in " + data.GetMilesTillNextChange().ToString() + " mi]";
+                }
+
+                data.SetOdometerSys(!data.GetOdometerSys());
             }
             else if (categoryName == "Units")
             {
@@ -183,125 +232,69 @@ namespace EVIC
             }
 
             return categoryValue;
-        }
+        } // End GetCategoryValueString()
 
-        public List<string> GetArrowDirectionStrings(string arrowDir, int length)
+        // Reset Current Trip Distance
+        //
+        // Reset the current trip distance value
+        public void ResetCurrentTripDist()
         {
-            // Define variables
-            List<string> output = new List<string>();
-            string intermediateLine = new String(' ', length);
-            string sidewaysArrowIntermediate = new String(' ', (length - 2));
-            string uprightArrowIntermediate = new String(' ', (length - 1));
-            string upDownArrowIntermediate = new String(' ', (length - 2));
-            string errorIntermediate = new String(' ', (length - 5));
-            string escapeIntermediate = new String(' ', (length - 3));
-            string spaceIntermediate = new String(' ', (length - 5));
-
-            if (arrowDir == "left")
+            if (data.IsTripA())
             {
-                output.Add("|" + intermediateLine + "|");
-                output.Add("|" + sidewaysArrowIntermediate + "<-|");
-            }
-            else if (arrowDir == "up")
-            {
-                output.Add("|" + uprightArrowIntermediate + "^|");
-                output.Add("|" + uprightArrowIntermediate + "||");
-            }
-            else if (arrowDir == "right")
-            {
-                output.Add("|" + intermediateLine + "|");
-                output.Add("|" + sidewaysArrowIntermediate + "->|");
-            }
-            else if (arrowDir == "down")
-            {
-                output.Add("|" + uprightArrowIntermediate + "||");
-                output.Add("|" + uprightArrowIntermediate + "v|");
-            }
-            else if (arrowDir == "up&down")
-            {
-                output.Add("|" + upDownArrowIntermediate + "^||");
-                output.Add("|" + upDownArrowIntermediate + "|v|");
-            }
-            else if (arrowDir == "escape")
-            {
-                output.Add("|" + intermediateLine + "|");
-                output.Add("|" + escapeIntermediate + "Esc|");
-            }
-            else if (arrowDir == "space")
-            {
-                output.Add("|" + intermediateLine + "|");
-                output.Add("|" + spaceIntermediate + "space|");
+                ResetTripADist();
             }
             else
             {
-                output.Add("|" + intermediateLine + "|");
-                output.Add("|" + errorIntermediate + "error|");
+                ResetTripBDist();
             }
-
-            return output;
         }
 
-        // Display Option
+        // Reset Oil Change
         //
-        // @param categoryName A list of names of the category options presented
-        //      to the user
-        // @param arrowDir A list of arrow directions for the various category options
-        // @return the string array for the option information
-        public List<List<string>> DisplayOption(List<string> categoryName, List<string> arrowDir)
+        // Reset the oil change distance to the default value(3000 mi)
+        public void ResetOilChange()
         {
-            List<List<string>> totalOutput = new List<List<string>>();
-            List<string> output = new List<string>();
-            int displayLength = 0;
+            data.SetOilChangeDist(0);
+        }
 
-            // Verify that the number of category names and arrow directions are the same
-            if (categoryName.Count != arrowDir.Count)
-            {
-                return null;
-            }
+        // Reset Trip A Distance
+        //
+        // Reset the Trip A distance value
+        public void ResetTripADist()
+        {
+            data.SetTripADist(0);
+        }
 
-            // Add the information for all of the options
-            for (int i = 0; i < categoryName.Count; i++)
-            {
-                output = new List<string>();
-                // Get the value to be outputted
-                string categoryValue = GetCategoryValueString(categoryName[i]);
+        // Reset Trip B Distance
+        //
+        // Reset the Trip B distance value
+        public void ResetTripBDist()
+        {
+            data.SetTripBDist(0);
+        }
 
-                // Determine the length of the option display
-                if (displayLength < categoryName[i].Length)
-                {
-                    displayLength = categoryName[i].Length;
-                }
-                if (displayLength < categoryValue.Length)
-                {
-                    displayLength = categoryValue.Length;
-                }
+        // Toggle Display Temp
+        //
+        // Toggle whether or not the display temperature is the outside temperature
+        public void ToggleDisplayTemp()
+        {
+            data.SetDisplayTemp(!data.IsOutTemp());
+        }
 
-                // Create boundary
-                string topBottomBoundary = new String('-', (displayLength + 2));
-                string intermediateLine = new String(' ', displayLength);
-                string categoryNameBuffer = new String(' ', (displayLength - categoryName[i].Length));
-                string categoryValueBuffer = new String(' ', (displayLength - categoryValue.Length));
+        // Toggle Metric Units
+        //
+        // Toggle whether or not the values are outputted in metric
+        public void ToggleMetricUnits()
+        {
+            data.SetMetricUnits(!data.IsMetricUnits());
+        }
 
-                // Get the arrow lines
-                List<string> arrowOutput = GetArrowDirectionStrings(arrowDir[i], displayLength);
-
-                // Add the lines to the display array
-                output.Add(topBottomBoundary);
-                output.Add("|" + categoryNameBuffer + categoryName[i] + "|");
-                output.Add("|" + categoryValueBuffer + categoryValue + "|");
-                for (int j = 0; j < arrowOutput.Count; j++)
-                {
-                    output.Add(arrowOutput[j]);
-                }
-                output.Add(topBottomBoundary);
-                output.Add(" " + intermediateLine + " ");
-                totalOutput.Add(output);
-
-                // Reset variables
-                displayLength = 0;
-            }
-
-            return totalOutput;
+        // Update Warning Message Type
+        //
+        // Move the warning message state to the next state
+        public void UpdateWarningMessageState()
+        {
+            data.SetWarningMessageState(data.GetWarningMessageState() + 1);
         }
 
     }
