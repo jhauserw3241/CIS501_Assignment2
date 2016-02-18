@@ -9,14 +9,15 @@ namespace EVIC
         private bool checkEngine = false;
         private bool changeOil = false;
         private bool doorAjar = false;
-        private int inTemp = 0;
+        private double inTemp = 0.00;
+        private bool isFarenheitUnits = false;
         private bool isMetricUnits = false;
         private bool isOdometerSys = true;
         private bool isOutTemp = false;
         private bool isTripA = true;
         private int milesTillNextChange = 3000;
         private int odometerValue = 0;
-        private int outTemp = 0;
+        private double outTemp = 0.00;
         private int tripADist = 0;
         private int tripBDist = 0;
         private int warningMessageState = 0;
@@ -47,6 +48,14 @@ namespace EVIC
             return doorAjar;
         }
 
+        // Is Farenheit Units
+        //
+        // @whether or not the degrees are in farenheit
+        public bool IsFarenheitUnits()
+        {
+            return isFarenheitUnits;
+        }
+
         // Is Metric Units
         //
         // @return whether or not the output should be display in metric units
@@ -75,7 +84,7 @@ namespace EVIC
         // Get In Temp
         //
         // @return the internal temp of the car
-        public int GetInTemp()
+        public double GetInTemp()
         {
             return inTemp;
         }
@@ -107,7 +116,7 @@ namespace EVIC
         // Get Out Temperature
         //
         // @return the out temperature
-        public int GetOutTemp()
+        public double GetOutTemp()
         {
             return outTemp;
         }
@@ -171,10 +180,18 @@ namespace EVIC
             doorAjar = val;
         }
 
+        // Set Farenheit Units
+        //
+        // @param whether or not the units are in farenheit
+        public void SetFarenheitUnits(bool val)
+        {
+            isFarenheitUnits = val;
+        }
+
         // Set Inside Temperature
         //
         // Set the temperature inside of the vehicle.
-        public void SetInTemp(int temp)
+        public void SetInTemp(double temp)
         {
             inTemp = temp;
         }
@@ -218,7 +235,7 @@ namespace EVIC
         // Set Outside Temperature
         // 
         // Set the temperature inside the vehicle.
-        public void SetOutTemp(int temp)
+        public void SetOutTemp(double temp)
         {
             outTemp = temp;
         }

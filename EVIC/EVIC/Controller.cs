@@ -15,18 +15,18 @@ namespace EVIC
         // @param value the specified value
         // @param into the unit type to convert the specified value to
         // @return the converted value
-        private int CnvtUnits(int value, string into)
+        private double CnvtUnits(double value, string into)
         {
             switch (into)
             {
                 case "c":
-                    return (int)Math.Round(((double)value - 32.0) / (9.0 / 5.0));
+                    return Math.Round((value - 32.0) / (9.0 / 5.0));
                 case "f":
-                    return (int)Math.Round((double)value * (9.0 / 5.0) + 32.0);
+                    return Math.Round(value * (9.0 / 5.0) + 32.0);
                 case "km":
-                    return (int)Math.Round((double)value / 0.62137);
+                    return Math.Round(value / 0.62137);
                 case "mi":
-                    return (int)Math.Round((double)value * 0.62137);
+                    return Math.Round(value * 0.62137);
                 default:
                     return -1;
             }
@@ -331,6 +331,24 @@ namespace EVIC
             data.SetTripBDist(0);
         }
 
+        // Set Inside Temperature
+        //
+        // Set the inside temperature
+        public void SetInsideTemperature(double val)
+        {
+            data.SetInTemp(val);
+            data.SetFarenheitUnits(true);
+        }
+
+        // Set Outside Temperature
+        //
+        // Set the outside temperature
+        public void SetOutsideTemperature(double val)
+        {
+            data.SetOutTemp(val);
+            data.SetFarenheitUnits(true);
+        }
+
         // Switch Units
         //
         // Switcdh units from metric to US or vice versa for all important values
@@ -339,19 +357,19 @@ namespace EVIC
             // Determine if the data is currently in metric units
             if (data.IsMetricUnits())
             {
-                data.SetOdometerValue(CnvtUnits(data.GetOdometerValue(), "mi"));
-                data.SetOilChangeDist(CnvtUnits(data.GetMilesTillNextChange(), "mi"));
-                data.SetTripADist(CnvtUnits(data.GetTripADist(), "mi"));
-                data.SetTripBDist(CnvtUnits(data.GetTripBDist(), "mi"));
+                data.SetOdometerValue((int)CnvtUnits((double)data.GetOdometerValue(), "mi"));
+                data.SetOilChangeDist((int)CnvtUnits((double)data.GetMilesTillNextChange(), "mi"));
+                data.SetTripADist((int)CnvtUnits((double)data.GetTripADist(), "mi"));
+                data.SetTripBDist((int)CnvtUnits((double)data.GetTripBDist(), "mi"));
                 data.SetOutTemp(CnvtUnits(data.GetOutTemp(), "f"));
                 data.SetInTemp(CnvtUnits(data.GetInTemp(), "f"));
             }
             else
             {
-                data.SetOdometerValue(CnvtUnits(data.GetOdometerValue(), "km"));
-                data.SetOilChangeDist(CnvtUnits(data.GetMilesTillNextChange(), "km"));
-                data.SetTripADist(CnvtUnits(data.GetTripADist(), "km"));
-                data.SetTripBDist(CnvtUnits(data.GetTripBDist(), "km"));
+                data.SetOdometerValue((int)CnvtUnits((double)data.GetOdometerValue(), "km"));
+                data.SetOilChangeDist((int)CnvtUnits((double)data.GetMilesTillNextChange(), "km"));
+                data.SetTripADist((int)CnvtUnits((double)data.GetTripADist(), "km"));
+                data.SetTripBDist((int)CnvtUnits((double)data.GetTripBDist(), "km"));
                 data.SetOutTemp(CnvtUnits(data.GetOutTemp(), "c"));
                 data.SetInTemp(CnvtUnits(data.GetInTemp(), "c"));
             }
