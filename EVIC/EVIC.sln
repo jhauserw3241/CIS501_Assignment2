@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EVIC", "EVIC\EVIC.csproj", "{7459FD72-823D-4072-AE6C-885B2D94054E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EVICTests", "EVICTests\EVICTests.csproj", "{0942307E-0A56-43E6-A39A-D0F95C4E8B90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7459FD72-823D-4072-AE6C-885B2D94054E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7459FD72-823D-4072-AE6C-885B2D94054E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7459FD72-823D-4072-AE6C-885B2D94054E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0942307E-0A56-43E6-A39A-D0F95C4E8B90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0942307E-0A56-43E6-A39A-D0F95C4E8B90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0942307E-0A56-43E6-A39A-D0F95C4E8B90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0942307E-0A56-43E6-A39A-D0F95C4E8B90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
