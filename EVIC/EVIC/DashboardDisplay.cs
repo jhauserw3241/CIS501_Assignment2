@@ -22,7 +22,11 @@ namespace EVIC
         // Display and handle the personal settings options
         public void PersonalSettingsMap()
         {
-            Console.Clear();
+            try
+            {
+                Console.Clear();
+            }
+            catch (System.IO.IOException ex) { }
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -43,7 +47,11 @@ namespace EVIC
             SetDisplayOptions(categoryNames, arrowDirs);
 
             // Interpret the user's choice
-            ConsoleKey input = Console.ReadKey().Key;
+            ConsoleKey input = ConsoleKey.End;
+            try
+            {
+                input = Console.ReadKey().Key;
+            } catch (System.InvalidOperationException ex) { }
             if (ConsoleKey.LeftArrow == input)
             {
                 WarningMessagesMap();
@@ -103,7 +111,10 @@ namespace EVIC
         // Display and handle the system status options
         public void SystemStatusMap()
         {
-            Console.Clear();
+            try {
+                Console.Clear();
+            }
+            catch (System.IO.IOException ex) { }
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -124,7 +135,12 @@ namespace EVIC
             SetDisplayOptions(categoryNames, arrowDirs);
 
             // Interpret the user's choice
-            ConsoleKey input = Console.ReadKey(true).Key;
+            ConsoleKey input = ConsoleKey.End;
+            try
+            {
+                input = Console.ReadKey().Key;
+            }
+            catch (System.InvalidOperationException ex) { }
             if (ConsoleKey.LeftArrow == input)
             {
                 //Console.WriteLine("Left");
@@ -153,7 +169,11 @@ namespace EVIC
             {
                 Console.WriteLine("Error: Invalid option");
             }
-            Console.ReadKey();
+            try
+            {
+                Console.ReadKey();
+            }
+            catch (System.InvalidOperationException ex) { }
         }
 
         // Temperature Display Map
@@ -161,7 +181,11 @@ namespace EVIC
         // Display and handle the temperature display options
         public void TemperatureDisplayMap()
         {
-            Console.Clear();
+            try
+            {
+                Console.Clear();
+            }
+            catch (System.IO.IOException ex) { }
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -180,7 +204,12 @@ namespace EVIC
             SetDisplayOptions(categoryNames, arrowDirs);
 
             // Interpret the user's choice
-            ConsoleKey input = Console.ReadKey().Key;
+            ConsoleKey input = ConsoleKey.End;
+            try
+            {
+                input = Console.ReadKey().Key;
+            }
+            catch (System.InvalidOperationException ex) { }
             if (ConsoleKey.LeftArrow == input)
             {
                 PersonalSettingsMap();
@@ -209,7 +238,11 @@ namespace EVIC
         // Display and handle the trip information options
         public void TripInfoMap()
         {
-            Console.Clear();
+            try
+            {
+                Console.Clear();
+            }
+            catch (System.IO.IOException ex) { }
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -228,7 +261,12 @@ namespace EVIC
             SetDisplayOptions(categoryNames, arrowDirs);
 
             // Interpret the user's choice
-            ConsoleKey input = Console.ReadKey().Key;
+            ConsoleKey input = ConsoleKey.End;
+            try
+            {
+                input = Console.ReadKey().Key;
+            }
+            catch (System.InvalidOperationException ex) { }
             if (ConsoleKey.LeftArrow == input)
             {
                 TemperatureDisplayMap();
@@ -258,7 +296,11 @@ namespace EVIC
         // Display and handle the warning messages options
         public void WarningMessagesMap()
         {
-            Console.Clear();
+            try
+            {
+                Console.Clear();
+            }
+            catch (System.IO.IOException ex) { }
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -275,7 +317,12 @@ namespace EVIC
             SetDisplayOptions(categoryNames, arrowDirs);
 
             // Interpret the user's choice
-            ConsoleKey input = Console.ReadKey().Key;
+            ConsoleKey input = ConsoleKey.End;
+            try
+            {
+                input = Console.ReadKey().Key;
+            }
+            catch (System.InvalidOperationException ex) { }
             if (ConsoleKey.LeftArrow == input)
             {
                 SystemStatusMap();

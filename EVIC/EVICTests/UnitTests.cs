@@ -131,15 +131,6 @@ namespace EVICTests
             sim.DisplayTempMenu();
         }
 
-        // Test Temperature Input
-        // 
-        // Test if the prompt displays properly, and if an input can be properly recieved.
-        [TestMethod]
-        public void TestTemperatureInput()
-        {
-            sim.GetTemp("outside");
-        }
-
         // Test Warning Menu Display
         // 
         // Test if the warning Menu Screen displays properly.
@@ -147,6 +138,60 @@ namespace EVICTests
         public void TestWarningMenuDisplay()
         {
             sim.DisplayWarningMenu();
+        }
+
+        #endregion
+
+        #region DashboardTests
+
+        private DashboardDisplay dash = new DashboardDisplay(cont);
+
+        [TestMethod]
+        public void TestPersonalSettingsMap()
+        {
+            dash.PersonalSettingsMap();
+        }
+
+        [TestMethod]
+        public void TestSystemStatusMap()
+        {
+            dash.SystemStatusMap();
+        }
+
+        [TestMethod]
+        public void TestTemperatureDisplayMap()
+        {
+            dash.TemperatureDisplayMap();
+        }
+
+        [TestMethod]
+        public void TestTripInfoMap()
+        {
+            dash.TripInfoMap();
+        }
+
+        [TestMethod]
+        public void TestWarningMessagesMap()
+        {
+            dash.WarningMessagesMap();
+        }
+
+        [TestMethod]
+        public void ValidSetDisplayOptions()
+        {
+            List<string> exmp1 = new List<string>()
+            {
+                "System Status",
+                "Trip Info"
+            };
+
+            List<string> exmp2 = new List<string>()
+            {
+                "left",
+                "right"
+            };
+
+            dash.SetDisplayOptions(exmp1, exmp2);
         }
 
         #endregion
