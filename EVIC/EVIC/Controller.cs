@@ -9,6 +9,29 @@ namespace EVIC
     {
         private Model data = new Model();
 
+        // Convert Units
+        //
+        // Convert the specified value to the specified unit type
+        // @param value the specified value
+        // @param into the unit type to convert the specified value to
+        // @return the converted value
+        private int CnvtUnits(int value, string into)
+        {
+            switch (into)
+            {
+                case "c":
+                    return (int)Math.Round(((double)value - 32.0) / (9.0 / 5.0));
+                case "f":
+                    return (int)Math.Round((double)value * (9.0 / 5.0) + 32.0);
+                case "km":
+                    return (int)Math.Round((double)value / 0.62137);
+                case "mi":
+                    return (int)Math.Round((double)value * 0.62137);
+                default:
+                    return -1;
+            }
+        }
+
         // Display Option
         //
         // @param categoryName A list of names of the category options presented
@@ -211,11 +234,11 @@ namespace EVIC
                 }
                 else if (data.GetWarningMessageState() == 1)
                 {
-                    categoryValue = "[Check Engine Soon: " + data.IsCheckEngine().ToString() + "]";
+                    categoryValue = "[Check Engine: " + data.IsCheckEngine().ToString() + "]";
                 }
                 else if (data.GetWarningMessageState() == 2)
                 {
-                    categoryValue = "[Oil change in " + data.GetMilesTillNextChange().ToString() + " mi]";
+                    categoryValue = "[Oil change: " + data.IsChangeOil().ToString() + "]";
                 }
                 else
                 {
@@ -245,6 +268,16 @@ namespace EVIC
 
             // Decrement the miles till the next oil change
             data.SetOilChangeDist(data.GetMilesTillNextChange() - 1);
+
+            // Check if the oil needs to be changed
+            if (data.GetMilesTillNextChange() == 0)
+            {
+                data.SetChangeOil(true);
+            }
+            else
+            {
+                data.SetChangeOil(false);
+            }
 
             // Determine if there is any more distance in the first trip
             if (data.GetTripADist() > 0)
@@ -298,6 +331,56 @@ namespace EVIC
             data.SetTripBDist(0);
         }
 
+        // Switch Units
+        //
+        // Switcdh units from metric to US or vice versa for all important values
+        public void SwitchUnits()
+        {
+            // Determine if the data is currently in metric units
+            if (data.IsMetricUnits())
+            {
+                data.SetOdometerValue(CnvtUnits(data.GetOdometerValue(), "mi"));
+                data.SetOilChangeDist(CnvtUnits(data.GetMilesTillNextChange(), "mi"));
+                data.SetTripADist(CnvtUnits(data.GetTripADist(), "mi"));
+                data.SetTripBDist(CnvtUnits(data.GetTripBDist(), "mi"));
+                data.SetOutTemp(CnvtUnits(data.GetOutTemp(), "f"));
+                data.SetInTemp(CnvtUnits(data.GetInTemp(), "f"));
+            }
+            else
+            {
+                data.SetOdometerValue(CnvtUnits(data.GetOdometerValue(), "km"));
+                data.SetOilChangeDist(CnvtUnits(data.GetMilesTillNextChange(), "km"));
+                data.SetTripADist(CnvtUnits(data.GetTripADist(), "km"));
+                data.SetTripBDist(CnvtUnits(data.GetTripBDist(), "km"));
+                data.SetOutTemp(CnvtUnits(data.GetOutTemp(), "c"));
+                data.SetInTemp(CnvtUnits(data.GetInTemp(), "c"));
+            }
+        }
+
+        // Toggle Change Oil
+        //
+        // Toggle whether or not the user needs to change the oil
+        public void ToggleChangeOil()
+        {
+            data.SetChangeOil(!data.IsChangeOil());
+        }
+
+        // Toggle Check Engine
+        //
+        // Toggle whether or not the user should check the engine
+        public void ToggleCheckEngine()
+        {
+            data.SetCheckEngine(!data.IsCheckEngine());
+        }
+
+        // Toggle Door Ajar
+        //
+        // Toggle whether or not the door is ajar
+        public void ToggleDoorAjar()
+        {
+            data.SetDoorAjar(!data.IsDoorAjar());
+        }
+
         // Toggle Display Temp
         //
         // Toggle whether or not the display temperature is the outside temperature
@@ -320,45 +403,6 @@ namespace EVIC
         public void UpdateWarningMessageState()
         {
             data.SetWarningMessageState(data.GetWarningMessageState() + 1);
-        }
-
-
-
-        public void SwitchUnits()
-        {
-            if (data.IsMetricUnits())
-            {
-                data.SetOdometerValue(CnvtUnits(data.GetOdometerValue(), "mi"));
-                data.SetOilChangeDist(CnvtUnits(data.GetMilesTillNextChange(), "mi"));
-                data.SetTripADist(CnvtUnits(data.GetTripADist(), "mi"));
-                data.SetTripBDist(CnvtUnits(data.GetTripBDist(), "mi"));
-                data.SetOutTemp(CnvtUnits(data.GetOutTemp(), "f"));
-                data.SetInTemp(CnvtUnits(data.GetInTemp(), "f"));
-            } else {
-                data.SetOdometerValue(CnvtUnits(data.GetOdometerValue(), "km"));
-                data.SetOilChangeDist(CnvtUnits(data.GetMilesTillNextChange(), "km"));
-                data.SetTripADist(CnvtUnits(data.GetTripADist(), "km"));
-                data.SetTripBDist(CnvtUnits(data.GetTripBDist(), "km"));
-                data.SetOutTemp(CnvtUnits(data.GetOutTemp(), "c"));
-                data.SetInTemp(CnvtUnits(data.GetInTemp(), "c"));
-            }
-        }
-
-        private int CnvtUnits(int value, string into)
-        {
-            switch (into)
-            {
-                case "c":
-                    return (int)Math.Round(((double)value - 32.0) / (9.0 / 5.0));
-                case "f":
-                    return (int)Math.Round((double)value * (9.0 / 5.0) + 32.0);
-                case "km":
-                    return (int)Math.Round((double)value / 0.62137);
-                case "mi":
-                    return (int)Math.Round((double)value * 0.62137);
-                default:
-                    return -1;
-            }
         }
     }
 }

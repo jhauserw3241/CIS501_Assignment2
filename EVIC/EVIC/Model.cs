@@ -7,6 +7,7 @@ namespace EVIC
     {
         // Define variables
         private bool checkEngine = false;
+        private bool changeOil = false;
         private bool doorAjar = false;
         private int inTemp = 0;
         private bool isMetricUnits = false;
@@ -28,6 +29,14 @@ namespace EVIC
         public bool IsCheckEngine()
         {
             return checkEngine;
+        }
+
+        // Is Change Oil
+        //
+        // @return whether or not the oil needs to be checked
+        public bool IsChangeOil()
+        {
+            return changeOil;
         }
 
         // Is Door Ajar
@@ -127,12 +136,39 @@ namespace EVIC
             return warningMessageState;
         }
 
+        // Set Check Engine
+        //
+        // Set if the engine needs to be checked soon
+        // @param whether or not the engine needs to be checked soon
+        public void SetCheckEngine(bool val)
+        {
+            checkEngine = val;
+        }
+
+        // Set Change Oil
+        //
+        // Set whether or not the user needs to change the oil
+        // @param val whether or not the oil needs to be changed
+        public void SetChangeOil(bool val)
+        {
+            changeOil = val;
+        }
+
         // Set Display Temperature
         //
         // Set whether or not the out temperature is being shown
         public void SetDisplayTemp(bool val)
         {
             isOutTemp = val;
+        }
+
+        // Set Door Ajar
+        //
+        // Set whether the door is ajar
+        // @param whether or not the door is open
+        public void SetDoorAjar(bool val)
+        {
+            doorAjar = val;
         }
 
         // Set Inside Temperature
