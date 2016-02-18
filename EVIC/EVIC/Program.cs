@@ -9,8 +9,9 @@ namespace EVIC
 {
     class Program
     {
-        private DashboardDisplay display = new DashboardDisplay();
-        private Simulator sim = new Simulator();
+        private static Controller controllerInfo = new Controller();
+        private DashboardDisplay display = new DashboardDisplay(controllerInfo);
+        private Simulator sim = new Simulator(controllerInfo);
 
         static void Main() {
             Program currentProgram = new Program();
