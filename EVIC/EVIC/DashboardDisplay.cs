@@ -7,7 +7,16 @@ namespace EVIC
 {
     public class DashboardDisplay
     {
-        private Controller controllerInfo = new Controller();
+        private Controller controllerInfo;
+
+        // Constructor
+        //
+        // Pass an instance of a shared controller.
+        public DashboardDisplay(Controller cont)
+        {
+            controllerInfo = cont;
+        }
+
         // Personal Settings Map
         //
         // Display and handle the personal settings options
