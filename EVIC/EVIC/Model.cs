@@ -10,7 +10,7 @@ namespace EVIC
         private bool changeOil = false;
         private bool doorAjar = false;
         private double inTemp = 0.00;
-        private bool isFarenheitUnits = false;
+        private bool isFarenheitUnits = true;
         private bool isMetricUnits = false;
         private bool isOdometerSys = true;
         private bool isOutTemp = false;
@@ -220,7 +220,7 @@ namespace EVIC
         // @param the odometer value to add to the odometer value
         public void SetOdometerValue(int val)
         {
-            odometerValue += val;
+            odometerValue = val;
         }
 
         // Set Oil Change
@@ -254,6 +254,14 @@ namespace EVIC
         public void SetTripBDist(int val)
         {
             tripBDist = val;
+        }
+
+        // Set Trip Display
+        //
+        // Set which trip is diplayed.
+        public void SetTripDisp(bool val)
+        {
+            isTripA = val;
         }
 
         // Set Warning Message State
