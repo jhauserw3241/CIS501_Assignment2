@@ -111,7 +111,7 @@ namespace EVIC
         private double GetTemp(string location)
         {
             double rtrn;
-            Console.WriteLine("Please enter a fahrenheit value for the {0} temperature: ", location);
+            Console.Write("Please enter a Fahrenheit value for the {0} temperature: ", location);
             if (Double.TryParse(Console.ReadLine(), out rtrn))
             {
                 return rtrn;

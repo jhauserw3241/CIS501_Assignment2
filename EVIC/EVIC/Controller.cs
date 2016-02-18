@@ -376,7 +376,7 @@ namespace EVIC
         public void SwitchUnits()
         {
             // Determine if the data is currently in metric units
-            if (data.IsMetricUnits())
+            if (!data.IsMetricUnits())
             {
                 data.SetOdometerValue((int)CnvtUnits((double)data.GetOdometerValue(), "mi"));
                 data.SetOilChangeDist((int)CnvtUnits((double)data.GetMilesTillNextChange(), "mi"));
@@ -434,6 +434,7 @@ namespace EVIC
         public void ToggleMetricUnits()
         {
             data.SetMetricUnits(!data.IsMetricUnits());
+            data.SetFarenheitUnits(!data.IsFarenheitUnits());
             SwitchUnits();
         }
 
