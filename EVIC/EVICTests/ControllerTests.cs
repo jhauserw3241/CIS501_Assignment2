@@ -11,14 +11,14 @@ namespace EVICTests
     public class ControllerTests
     {
         // Create an instance of the controller class to test
-        private Controller cont = new Controller();
+        public Controller cont = new Controller();
 
         // Different Size Lists Display Option
         //
         // Test DisplayOption() with the two list arguments being different sizes
         [TestMethod]
         [ExpectedException(typeof(ArgumentException),
-        "The number of items in the two parameter lists don't match")]
+        "Parameter lists not same size")]
         public void DifferentSizeListsDisplayOptionTest()
         {
             // Arguments

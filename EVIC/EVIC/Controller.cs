@@ -46,7 +46,10 @@ namespace EVIC
             int displayLength = 0;
 
             // Verify that the number of category names and arrow directions are the same
-            ArgumentException.Equals(categoryName.Count, arrowDir.Count);
+            if (categoryName.Count != arrowDir.Count)
+            {
+                throw new ArgumentException("Parameter lists not same size");
+            }
 
             // Add the information for all of the options
             for (int i = 0; i < categoryName.Count; i++)
@@ -64,6 +67,11 @@ namespace EVIC
                 if (displayLength < categoryValue.Length)
                 {
                     displayLength = categoryValue.Length;
+                }
+                // Verify that the display length is larger than the length of the word "error"
+                if (displayLength < 5)
+                {
+                    displayLength = 5;
                 }
 
                 // Create boundary
