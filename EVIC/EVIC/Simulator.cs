@@ -23,7 +23,7 @@ namespace EVIC
         // Display Main Menu
         // 
         // Displays the choices for the main menu of the simulator.
-        private void DisplayMainMenu()
+        public void DisplayMainMenu()
         {
             Console.WriteLine("╔═══╤══════════════════╗");
             Console.WriteLine("║ 1 │ System Status    ║");
@@ -39,7 +39,7 @@ namespace EVIC
         // Display System Modifier
         // 
         // Display the message indicating how the user can modify the System Status from the simulator.
-        private void DisplaySystemMod()
+        public void DisplaySystemMod()
         {
             Console.WriteLine("Press [Enter] to increment the distance one unit in the displayed format (Esc to leave).");
         }
@@ -47,7 +47,7 @@ namespace EVIC
         // Display Warning Menu
         // 
         // Displays the choices for the warning toggle menu of the simulator.
-        private void DisplayWarningMenu()
+        public void DisplayWarningMenu()
         {
             Console.WriteLine("╔═══╤══════════════════╗");
             Console.WriteLine("║ A │ Door ajar        ║");
@@ -63,7 +63,7 @@ namespace EVIC
         // Display Temperature Menu
         // 
         // Displays the choices for altering the temperature display fromt eh simulator.
-        private void DisplayTempMenu()
+        public void DisplayTempMenu()
         {
             Console.WriteLine("╔═══╤═════════════════════╗");
             Console.WriteLine("║ A │ Outside Temperature ║");
@@ -77,7 +77,7 @@ namespace EVIC
         // Get Action
         // 
         // Translates keyboard input into a standard numerical value recognized throughout this class.
-        private int GetAction()
+        public int GetAction()
         {
             ConsoleKeyInfo input = Console.ReadKey(true);
             switch (input.Key)
@@ -108,7 +108,7 @@ namespace EVIC
         // Get Temperature
         // 
         // Prompts the user for a new temperature value, returns the original value if an incorrect value is entered.
-        private double GetTemp(string location)
+        public double GetTemp(string location)
         {
             double rtrn;
             Console.Write("Please enter a Fahrenheit value for the {0} temperature: ", location);
