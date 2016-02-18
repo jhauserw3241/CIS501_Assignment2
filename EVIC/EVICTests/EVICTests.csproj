@@ -50,8 +50,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="ControllerTests.cs" />
+    <Compile Include="DashboardDisplayTests.cs" />
+    <Compile Include="ModelTests.cs" />
+    <Compile Include="ProgramTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimulatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EVIC\EVIC.csproj">

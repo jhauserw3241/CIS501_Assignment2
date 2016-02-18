@@ -5,11 +5,7 @@ using EVIC;
 namespace EVICTests
 {
     [TestClass]
-    public class UnitTest1
+    class SimulatorTests
     {
-        [TestMethod]
-        public void TestMethod1()
-        {
-        }
     }
 }

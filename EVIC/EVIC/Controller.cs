@@ -40,20 +40,19 @@ namespace EVIC
         // @return the string array for the option information
         public List<List<string>> DisplayOption(List<string> categoryName, List<string> arrowDir)
         {
+            // Define variables
             List<List<string>> totalOutput = new List<List<string>>();
             List<string> output = new List<string>();
             int displayLength = 0;
 
             // Verify that the number of category names and arrow directions are the same
-            if (categoryName.Count != arrowDir.Count)
-            {
-                return null;
-            }
+            ArgumentException.Equals(categoryName.Count, arrowDir.Count);
 
             // Add the information for all of the options
             for (int i = 0; i < categoryName.Count; i++)
             {
                 output = new List<string>();
+
                 // Get the value to be outputted
                 string categoryValue = GetCategoryValueString(categoryName[i]);
 
@@ -99,7 +98,7 @@ namespace EVIC
         //
         // Get the strings that will tell the user which key they need to press to
         // achieve the desired operation
-        public List<string> GetArrowDirectionStrings(string arrowDir, int length)
+        private List<string> GetArrowDirectionStrings(string arrowDir, int length)
         {
             // Define variables
             List<string> output = new List<string>();
@@ -312,7 +311,7 @@ namespace EVIC
         // Reset the oil change distance to the default value(3000 mi)
         public void ResetOilChange()
         {
-            data.SetOilChangeDist(0);
+            data.SetOilChangeDist(3000);
         }
 
         // Reset Trip A Distance
