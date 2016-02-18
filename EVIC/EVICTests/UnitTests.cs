@@ -13,7 +13,7 @@ namespace EVICTests
         #region ControllerTests
 
         // Create an instance of the controller class to test
-        private Controller cont = new Controller();
+        private static Controller cont = new Controller();
 
         // Different Size Lists Display Option
         //
@@ -61,7 +61,7 @@ namespace EVICTests
 
         #region ModelTests
 
-        //Create an instance of the model classto test
+        //Create an instance of the model class to test
         private Model data = new Model();
 
         // Valid Check Engine Test
@@ -95,6 +95,58 @@ namespace EVICTests
         {
             data.SetDoorAjar(true);
             Assert.IsTrue(data.IsDoorAjar());
+        }
+
+        #endregion
+
+        #region SimulatorTests
+
+        // Create an instance of the simulator to test.
+        private Simulator sim = new Simulator(cont);
+
+        // Test Main Menu Display
+        // 
+        // Test if the main menu properly displays
+        [TestMethod]
+        public void TestMainMenuDisplay()
+        {
+            sim.DisplayMainMenu();
+        }
+
+        // Test System Modifier Display
+        // 
+        // Test if the System Modifier Screen properly displays.
+        [TestMethod]
+        public void TestSystemModDisplay()
+        {
+            sim.DisplaySystemMod();
+        }
+
+        // Test Temperature Display
+        // 
+        // Test if the Temperature Screen properly displays.
+        [TestMethod]
+        public void TestTemperatureDisplay()
+        {
+            sim.DisplayTempMenu();
+        }
+
+        // Test Temperature Input
+        // 
+        // Test if the prompt displays properly, and if an input can be properly recieved.
+        [TestMethod]
+        public void TestTemperatureInput()
+        {
+            sim.GetTemp("outside");
+        }
+
+        // Test Warning Menu Display
+        // 
+        // Test if the warning Menu Screen displays properly.
+        [TestMethod]
+        public void TestWarningMenuDisplay()
+        {
+            sim.DisplayWarningMenu();
         }
 
         #endregion
