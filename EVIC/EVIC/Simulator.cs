@@ -9,6 +9,8 @@ namespace EVIC
     {
         private int menuMem = 0; // 0 = Main Menu, 1 = System Status, 2 = Warning Messages, 3 = Temperature
         private Controller controllerInfo;
+        
+        public int MenuMem { get { return menuMem; } }
 
         // Constructor
         // 
@@ -17,8 +19,6 @@ namespace EVIC
         {
             controllerInfo = cont;
         }
-        
-        public int MenuMem { get { return menuMem; } }
 
         // Display Main Menu
         // 
@@ -31,6 +31,8 @@ namespace EVIC
             Console.WriteLine("║ 2 │ Warning Messages ║");
             Console.WriteLine("╟───┼──────────────────╢");
             Console.WriteLine("║ 3 │ Temperature      ║");
+            Console.WriteLine("╟───┼──────────────────╢");
+            Console.WriteLine("║Esc│ Leave Simulator  ║");
             Console.WriteLine("╚═══╧══════════════════╝");
         }
 
@@ -39,7 +41,7 @@ namespace EVIC
         // Display the message indicating how the user can modify the System Status from the simulator.
         private void DisplaySystemMod()
         {
-            Console.WriteLine("Press [Enter] to increment distance.");
+            Console.WriteLine("Press [Enter] to increment the distance one unit in the displayed format (Esc to leave).");
         }
 
         // Display Warning Menu
@@ -53,6 +55,8 @@ namespace EVIC
             Console.WriteLine("║ B │ Check Engine     ║");
             Console.WriteLine("╟───┼──────────────────╢");
             Console.WriteLine("║ C │ Change Oil       ║");
+            Console.WriteLine("╟───┼──────────────────╢");
+            Console.WriteLine("║Esc│ Return to Menu   ║");
             Console.WriteLine("╚═══╧══════════════════╝");
         }
 
@@ -65,21 +69,9 @@ namespace EVIC
             Console.WriteLine("║ A │ Outside Temperature ║");
             Console.WriteLine("╟───┼─────────────────────╢");
             Console.WriteLine("║ B │ Inside Temperature  ║");
+            Console.WriteLine("╟───┼─────────────────────╢");
+            Console.WriteLine("║Esc│ Return to Menu      ║");
             Console.WriteLine("╚═══╧═════════════════════╝");
-        }
-
-        // Get Temperature
-        // 
-        // Prompts the user for a new temperature value, returns the original value if an incorrect value is entered.
-        private int GetTemp(string unit, int val)
-        {
-            int rtrn;
-            Console.WriteLine("Please enter a value in {0} for the temperature: ", unit);
-            if (Int32.TryParse(Console.ReadLine(), out rtrn))
-            {
-                return rtrn;
-            }
-            else return val;
         }
 
         // Get Action
@@ -111,6 +103,20 @@ namespace EVIC
                 default:
                     return -1;
             }
+        }
+
+        // Get Temperature
+        // 
+        // Prompts the user for a new temperature value, returns the original value if an incorrect value is entered.
+        private double GetTemp(string location)
+        {
+            double rtrn;
+            Console.WriteLine("Please enter a fahrenheit value for the {0} temperature: ", location);
+            if (Double.TryParse(Console.ReadLine(), out rtrn))
+            {
+                return rtrn;
+            }
+            else return 0.00;
         }
 
         // Main
@@ -181,10 +187,10 @@ namespace EVIC
                         switch (action)
                         {
                             case 3:
-                                // set outside temperature to GetTemp(unit, OutTemp);
+                                controllerInfo.SetOutsideTemperature(GetTemp("outside"));
                                 break;
                             case 4:
-                                // set inside temperature to GetTemp(unit, InTemp);
+                                controllerInfo.SetInsideTemperature(GetTemp("inside"));
                                 break;
                             case 8:
                                 menuMem = 0;

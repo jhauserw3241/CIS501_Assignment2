@@ -162,34 +162,51 @@ namespace EVIC
         public string GetCategoryValueString(string categoryName)
         {
             string categoryValue;
+            string dist, temp;
 
-            if (categoryName == "System Status")
+
+            if (data.IsMetricUnits())
             {
-                categoryValue = "[" + data.GetOdometerValue().ToString() + " mi]";
+                dist = "km";
             }
-            else if (categoryName == "Door Ajar")
+            else
+            {
+                dist = "mi";
+            }
+
+            if (data.IsFarenheitUnits())
+            {
+                temp = "F";
+            } else
+            {
+                temp = "C";
+            }
+
+            if (categoryName.Equals("System Status"))
+            {
+                categoryValue = "[" + data.GetOdometerValue().ToString() + " " + dist + "]";
+            }
+            else if (categoryName.Equals("Door Ajar"))
             {
                 categoryValue = "[" + data.IsDoorAjar().ToString() + "]";
             }
-            else if (categoryName == "Check Engine")
+            else if (categoryName.Equals("Check Engine"))
             {
                 categoryValue = "[" + data.IsCheckEngine().ToString() + "]";
             }
-            else if (categoryName == "System Info")
+            else if (categoryName.Equals("System Info"))
             {
                 // Determine whether or not to show the odometer value
                 if (data.GetOdometerSys())
                 {
-                    categoryValue = "[" + data.GetOdometerValue().ToString() + " mi]";
+                    categoryValue = "[" + data.GetOdometerValue().ToString() + " " + dist + "]";
                 }
                 else
                 {
-                    categoryValue = "[Oil change in " + data.GetMilesTillNextChange().ToString() + " mi]";
+                    categoryValue = "[Oil change in " + data.GetMilesTillNextChange().ToString() + " " + dist + "]";
                 }
-
-                data.SetOdometerSys(!data.GetOdometerSys());
             }
-            else if (categoryName == "Units")
+            else if (categoryName.Equals("Units"))
             {
                 // Determine whether the current units are US or metric
                 if (!data.IsMetricUnits())
@@ -201,31 +218,31 @@ namespace EVIC
                     categoryValue = "[Metric Units]";
                 }
             }
-            else if ((categoryName == "Temp Info") || (categoryName == "Toggle Temp Info"))
+            else if (categoryName.Equals("Temp Info") || categoryName.Equals("Toggle Temp Info"))
             {
                 // Determine whether the current temperature is the outside or inside temperature
                 if (data.IsOutTemp())
                 {
-                    categoryValue = "[" + data.GetOutTemp().ToString() + " F Outside]";
+                    categoryValue = "[" + data.GetOutTemp().ToString() + " " + temp + " Outside]";
                 }
                 else
                 {
-                    categoryValue = "[" + data.GetInTemp().ToString() + " F Inside]";
+                    categoryValue = "[" + data.GetInTemp().ToString() + " " + temp + " Inside]";
                 }
             }
-            else if ((categoryName == "Trip Info") || (categoryName == "Toggle Trip Info"))
+            else if (categoryName.Equals("Trip Info") || categoryName.Equals("Toggle Trip Info"))
             {
                 // Determine whether the current trip is trip A or B
                 if (data.IsTripA())
                 {
-                    categoryValue = "[Trip-A: " + data.GetTripADist().ToString() + " mi]";
+                    categoryValue = "[Trip-A: " + data.GetTripADist().ToString() + " " + dist + "]";
                 }
                 else
                 {
-                    categoryValue = "[Trip-B: " + data.GetTripBDist().ToString() + " mi]";
+                    categoryValue = "[Trip-B: " + data.GetTripBDist().ToString() + " " + dist + "]";
                 }
             }
-            else if (categoryName == "Warning Messages")
+            else if (categoryName.Equals("Warning Messages"))
             {
                 // Determine which state the user is on currently
                 if (data.GetWarningMessageState() == 0)
@@ -245,8 +262,6 @@ namespace EVIC
                     categoryValue = "Error";
                 }
 
-                // Update the warning message state
-                UpdateWarningMessageState();
             }
             else
             {
@@ -265,6 +280,12 @@ namespace EVIC
         {
             // Increment the odometer value
             data.SetOdometerValue(data.GetOdometerValue() + 1);
+            
+            // Increment the distance for Trip A
+            data.SetTripADist(data.GetTripADist() + 1);
+
+            // Increment the distance for Trip B
+            data.SetTripBDist(data.GetTripBDist() + 1);
 
             // Decrement the miles till the next oil change
             data.SetOilChangeDist(data.GetMilesTillNextChange() - 1);
@@ -277,18 +298,6 @@ namespace EVIC
             else
             {
                 data.SetChangeOil(false);
-            }
-
-            // Determine if there is any more distance in the first trip
-            if (data.GetTripADist() > 0)
-            {
-                // Decrement the distance for Trip A
-                data.SetTripADist(data.GetTripADist() - 1);
-            }
-            else if(data.GetTripBDist() > 0)
-            {
-                // Decrement the distance for Trip B
-                data.SetTripBDist(data.GetTripBDist() - 1);
             }
         }
 
@@ -336,8 +345,14 @@ namespace EVIC
         // Set the inside temperature
         public void SetInsideTemperature(double val)
         {
-            data.SetInTemp(val);
-            data.SetFarenheitUnits(true);
+            if (data.IsFarenheitUnits())
+            {
+                data.SetInTemp(val);
+            }
+            else
+            {
+                data.SetInTemp(CnvtUnits(val, "c"));
+            }
         }
 
         // Set Outside Temperature
@@ -345,8 +360,14 @@ namespace EVIC
         // Set the outside temperature
         public void SetOutsideTemperature(double val)
         {
-            data.SetOutTemp(val);
-            data.SetFarenheitUnits(true);
+            if (data.IsFarenheitUnits())
+            {
+                data.SetOutTemp(val);
+            }
+            else
+            {
+                data.SetOutTemp(CnvtUnits(val, "c"));
+            }
         }
 
         // Switch Units
@@ -413,6 +434,23 @@ namespace EVIC
         public void ToggleMetricUnits()
         {
             data.SetMetricUnits(!data.IsMetricUnits());
+            SwitchUnits();
+        }
+
+        // Toggle Odometer System
+        //
+        // Toggles what is displayed on the System Status screen.
+        public void ToggleOdometerSys()
+        {
+            data.SetOdometerSys(!data.GetOdometerSys());
+        }
+
+        // Toggle Trip Display
+        //
+        // Toggles which trip is displayed.
+        public void ToggleTripDisp()
+        {
+            data.SetTripDisp(!data.IsTripA());
         }
 
         // Update Warning Message Type

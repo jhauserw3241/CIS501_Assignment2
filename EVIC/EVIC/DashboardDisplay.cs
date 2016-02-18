@@ -22,6 +22,7 @@ namespace EVIC
         // Display and handle the personal settings options
         public void PersonalSettingsMap()
         {
+            Console.Clear();
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -102,6 +103,7 @@ namespace EVIC
         // Display and handle the system status options
         public void SystemStatusMap()
         {
+            Console.Clear();
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -122,7 +124,7 @@ namespace EVIC
             SetDisplayOptions(categoryNames, arrowDirs);
 
             // Interpret the user's choice
-            ConsoleKey input = Console.ReadKey().Key;
+            ConsoleKey input = Console.ReadKey(true).Key;
             if (ConsoleKey.LeftArrow == input)
             {
                 //Console.WriteLine("Left");
@@ -130,6 +132,7 @@ namespace EVIC
             }
             else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
             {
+                controllerInfo.ToggleOdometerSys();
                 SystemStatusMap();
             }
             else if (ConsoleKey.RightArrow == input)
@@ -158,6 +161,7 @@ namespace EVIC
         // Display and handle the temperature display options
         public void TemperatureDisplayMap()
         {
+            Console.Clear();
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -205,6 +209,7 @@ namespace EVIC
         // Display and handle the trip information options
         public void TripInfoMap()
         {
+            Console.Clear();
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -230,6 +235,7 @@ namespace EVIC
             }
             else if ((ConsoleKey.UpArrow == input) || ((ConsoleKey.DownArrow == input)))
             {
+                controllerInfo.ToggleTripDisp();
                 TripInfoMap();
             }
             else if (ConsoleKey.RightArrow == input)
@@ -252,6 +258,7 @@ namespace EVIC
         // Display and handle the warning messages options
         public void WarningMessagesMap()
         {
+            Console.Clear();
             // Display the data for the options to output to the user
             List<string> categoryNames = new List<string>()
             {
@@ -262,7 +269,7 @@ namespace EVIC
             List<string> arrowDirs = new List<string>()
             {
                 "left",
-                "up&down",
+                "up",
                 "right"
             };
             SetDisplayOptions(categoryNames, arrowDirs);
@@ -275,6 +282,8 @@ namespace EVIC
             }
             else if (ConsoleKey.UpArrow == input)
             {
+                // Update the warning message state
+                controllerInfo.UpdateWarningMessageState();
                 WarningMessagesMap();
             }
             else if (ConsoleKey.RightArrow == input)
